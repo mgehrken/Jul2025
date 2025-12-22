@@ -1,551 +1,389 @@
-0 20px rgba(0, 255, 255, 0.1);
-  margin-top: 20px;
-  }
-  
-  .title {
-    text-align: center;
-      color: #00ff00;
-        font-size: 32px;
-          text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
-            margin-bottom: 10px;
-              line-height: 1.4;
-              }
-              
-              .subtitle {
-                text-align: center;
-                  color: #ffff00;
-                    font-size: 14px;
-                      text-shadow: 0 0 10px #ffff00;
-                        margin-bottom: 30px;
-                        }
-                        
-                        .from-text {
-                          text-align: center;
-                            color: #ff00ff;
-                              font-size: 16px;
-                                font-weight: bold;
-                                  text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff;
-                                    margin: 20px 0;
-                                      letter-spacing: 2px;
-                                      }
-                                      
-                                      .button-group {
-                                        display: flex;
-                                          gap: 10px;
-                                            justify-content: center;
-                                              margin: 25px 0;
-                                                flex-wrap: wrap;
-                                                }
-                                                
-                                                .nav-button {
-                                                  background: transparent;
-                                                    color: #00ffff;
-                                                      border: 2px solid #00ffff;
-                                                        padding: 8px 15px;
-                                                          font-size: 12px;
-                                                            cursor: pointer;
-                                                              text-shadow: 0 0 10px #00ffff;
-                                                                box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-                                                                  transition: all 0.3s;
-                                                                    font-family: 'Press Start 2P', sans-serif;
-                                                                    }
-                                                                    
-                                                                    .nav-button:hover {
-                                                                      background: rgba(0, 255, 255, 0.2);
-                                                                        box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
-                                                                        }
-                                                                        
-                                                                        .menu-section {
-                                                                          background: rgba(0, 0, 0, 0.5);
-                                                                            border: 2px solid #ff00ff;
-                                                                              border-radius: 5px;
-                                                                                padding: 15px;
-                                                                                  margin: 20px 0;
-                                                                                    box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
-                                                                                    }
-                                                                                    
-                                                                                    .menu-item {
-                                                                                      color: #ff00ff;
-                                                                                        font-size: 14px;
-                                                                                          margin: 8px 0;
-                                                                                            text-shadow: 0 0 8px #ff00ff;
-                                                                                            }
-                                                                                            
-                                                                                            .respawn-section {
-                                                                                              background: rgba(0, 0, 0, 0.5);
-                                                                                                border: 2px solid #ffff00;
-                                                                                                  border-radius: 5px;
-                                                                                                    padding: 15px;
-                                                                                                      margin: 20px 0;
-                                                                                                        box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
-                                                                                                          text-align: center;
-                                                                                                          }
-                                                                                                          
-                                                                                                          .respawn-title {
-                                                                                                            color: #ffff00;
-                                                                                                              font-size: 12px;
-                                                                                                                text-shadow: 0 0 8px #ffff00;
-                                                                                                                  margin-bottom: 8px;
-                                                                                                                  }
-                                                                                                                  
-                                                                                                                  .respawn-name {
-                                                                                                                    color: #ffff00;
-                                                                                                                      font-size: 16px;
-                                                                                                                        text-shadow: 0 0 10px #ffff00;
-                                                                                                                          margin: 8px 0;
-                                                                                                                          }
-                                                                                                                          
-                                                                                                                          .respawn-hp {
-                                                                                                                            color: #ffff00;
-                                                                                                                              font-size: 12px;
-                                                                                                                                text-shadow: 0 0 8px #ffff00;
-                                                                                                                                  margin-top: 8px;
-                                                                                                                                  }
-                                                                                                                                  
-                                                                                                                                  .loot-section {
-                                                                                                                                    background: rgba(0, 0, 0, 0.5);
-                                                                                                                                      border: 2px solid #ffff00;
-                                                                                                                                        border-radius: 5px;
-                                                                                                                                          padding: 15px;
-                                                                                                                                            margin: 20px 0;
-                                                                                                                                              text-align: center;
-                                                                                                                                                box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
-                                                                                                                                                }
-                                                                                                                                                
-                                                                                                                                                .loot-title {
-                                                                                                                                                  color: #ffff00;
-                                                                                                                                                    font-size: 14px;
-                                                                                                                                                      text-shadow: 0 0 10px #ffff00;
-                                                                                                                                                      }
-                                                                                                                                                      
-                                                                                                                                                      .icon-grid {
-                                                                                                                                                        display: grid;
-                                                                                                                                                          grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-                                                                                                                                                            gap: 15px;
-                                                                                                                                                              margin-top: 20px;
-                                                                                                                                                                justify-items: center;
-                                                                                                                                                                }
-                                                                                                                                                                
-                                                                                                                                                                .icon-box {
-                                                                                                                                                                  width: 60px;
-                                                                                                                                                                    height: 60px;
-                                                                                                                                                                      display: flex;
-                                                                                                                                                                        align-items: center;
-                                                                                                                                                                          justify-content: center;
-                                                                                                                                                                            font-size: 30px;
-                                                                                                                                                                              border: 2px solid;
-                                                                                                                                                                                border-radius: 5px;
-                                                                                                                                                                                  box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
-                                                                                                                                                                                    background: rgba(0, 0, 0, 0.3);
-                                                                                                                                                                                    }
-                                                                                                                                                                                    
-                                                                                                                                                                                    .icon-pizza { border-color: #ff6b6b; background: rgba(255, 107, 107, 0.2); }
-                                                                                                                                                                                    .icon-sleep { border-color: #4ecdc4; background: rgba(78, 205, 196, 0.2); }
-                                                                                                                                                                                    .icon-game { border-color: #ffe66d; background: rgba(255, 230, 109, 0.2); }
-                                                                                                                                                                                    .icon-replay { border-color: #95e1d3; background: rgba(149, 225, 211, 0.2); }
-                                                                                                                                                                                    
-                                                                                                                                                                                    .game-link {
-                                                                                                                                                                                      display: inline-block;
-                                                                                                                                                                                        margin-top: 20px;
-                                                                                                                                                                                          padding: 10px 20px;
-                                                                                                                                                                                            background: #ff00ff;
-                                                                                                                                                                                              color: #000;
-                                                                                                                                                                                                text-decoration: none;
-                                                                                                                                                                                                  border: 2px solid #ff00ff;
-                                                                                                                                                                                                    border-radius: 5px;
-                                                                                                                                                                                                      font-size: 12px;
-                                                                                                                                                                                                        font-weight: bold;
-                                                                                                                                                                                                          text-shadow: none;
-                                                                                                                                                                                                            box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
-                                                                                                                                                                                                              transition: all 0.3s;
-                                                                                                                                                                                                                font-family: 'Press Start 2P', sans-serif;
-                                                                                                                                                                                                                }
-                                                                                                                                                                                                                
-                                                                                                                                                                                                                .game-link:hover {
-                                                                                                                                                                                                                  background: #ff00ff;
-                                                                                                                                                                                                                    box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
-                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                    </style>
-                                                                                                                                                                                                                    </head>
-                                                                                                                                                                                                                    <body>
-                                                                                                                                                                                                                    <div class="gift-card">
-                                                                                                                                                                                                                      <div class="title">THE<br>GATHERING</div>
-                                                                                                                                                                                                                        <div class="subtitle">VIKINGSKIPET 2025</div>
-                                                                                                                                                                                                                          
-                                                                                                                                                                                                                            <div class="from-text">MAMMA OG PAPPA</div>
-                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                <div class="button-group">
-                                                                                                                                                                                                                                    <button class="nav-button">R</button>
-                                                                                                                                                                                                                                        <button class="nav-button">X</button>
-                                                                                                                                                                                                                                            <button class="nav-button">B</button>
-                                                                                                                                                                                                                                              </div>
-                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                <div class="menu-section">
-                                                                                                                                                                                                                                                    <div class="menu-item">🍕 EAT</div>
-                                                                                                                                                                                                                                                        <div class="menu-item">😴 SLEEP</div>
-                                                                                                                                                                                                                                                            <div class="menu-item">🎮 GAME</div>
-                                                                                                                                                                                                                                                                <div class="menu-item">🔄 REPEAT</div>
-                                                                                                                                                                                                                                                                  </div>
-                                                                                                                                                                                                                                                                  
-                                                                                                                                                                                                                                                                    <div class="respawn-section">
-                                                                                                                                                                                                                                                                        <div class="respawn-title">⭐ RESPAWN ⭐</div>
-                                                                                                                                                                                                                                                                            <div class="respawn-name">SCANDIC<br>HAMAR</div>
-                                                                                                                                                                                                                                                                                <div class="respawn-hp">HP: MAX</div>
-                                                                                                                                                                                                                                                                                  </div>
-                                                                                                                                                                                                                                                                                  
-                                                                                                                                                                                                                                                                                    <div class="loot-section">
-                                                                                                                                                                                                                                                                                        <div class="loot-title">✕ LEGENDARY LOOT ✕</div>
-                                                                                                                                                                                                                                                                                          </div>
-                                                                                                                                                                                                                                                                                          
-                                                                                                                                                                                                                                                                                            <div class="icon-grid">
-                                                                                                                                                                                                                                                                                                <div class="icon-box icon-pizza">🍕</div>
-                                                                                                                                                                                                                                                                                                    <div class="icon-box icon-sleep">😴</div>
-                                                                                                                                                                                                                                                                                                        <div class="icon-box icon-game">🎮</div>
-                                                                                                                                                                                                                                                                                                            <div class="icon-box icon-replay">🔄</div>
-                                                                                                                                                                                                                                                                                                              </div>
-                                                                                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                                                                                <div style="text-align: center; margin-top: 30px;">
-                                                                                                                                                                                                                                                                                                                    <a href="https://mgehrken.github.io/Jul2025/game.html" class="game-link">PLAY GAME</a>
-                                                                                                                                                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                                                                                                      </body>
-                                                                                                                                                                                                                                                                                                                      </html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="no">
-  <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Viking River Race - The Gathering</title>
-      <style>
-                @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viking River Race - The Gathering</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-                * {
-                              margin: 0;
-                              padding: 0;
-                              box-sizing: border-box;
-                }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-                body {
-                              background: #0a0a0a;
-                              display: flex;
-                              justify-content: center;
-                              align-items: center;
-                              min-height: 100vh;
-                              font-family: 'Press Start 2P', cursive;
-                              overflow: hidden;
-                }
+        body {
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Press Start 2P', cursive;
+            overflow: hidden;
+        }
 
-                #gameContainer {
-                              position: relative;
-                              width: 100vw;
-                              height: 100vh;
-                              max-width: 100%;
-                              max-height: 100%;
-                }
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100%;
+        }
 
-                canvas {
-                              display: block;
-                              width: 100%;
-                              height: 100%;
-                              touch-action: none;
-                }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
 
-                #gameUI {
-                              position: absolute;
-                              top: 20px;
-                              left: 20px;
-                              right: 20px;
-                              z-index: 10;
-                }
+        #gameUI {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 10;
+        }
 
-                #score {
-                              font-size: clamp(12px, 4vw, 20px);
-                              color: #00ff00;
-                              text-shadow: 0 0 10px #00ff00;
-                              padding: 10px;
-                              background: rgba(0, 0, 0, 0.8);
-                              border: 2px solid #00ff00;
-                              display: inline-block;
-                }
+        #score {
+            font-size: clamp(12px, 4vw, 20px);
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            display: inline-block;
+        }
 
-                #gameOver {
-                              position: absolute;
-                              top: 50%;
-                              left: 50%;
-                              transform: translate(-50%, -50%);
-                              background: rgba(0, 0, 0, 0.95);
-                              border: 4px solid #ff00ff;
-                              padding: 30px;
-                              text-align: center;
-                              z-index: 100;
-                              box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
-                              border-radius: 10px;
-                }
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ff00ff;
+            padding: 30px;
+            text-align: center;
+            z-index: 100;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+            border-radius: 10px;
+        }
 
-                #gameOver h1 {
-                              font-size: clamp(20px, 8vw, 40px);
-                              color: #ff0000;
-                              text-shadow: 0 0 20px #ff0000;
-                              margin-bottom: 20px;
-                }
+        #gameOver h1 {
+            font-size: clamp(20px, 8vw, 40px);
+            color: #ff0000;
+            text-shadow: 0 0 20px #ff0000;
+            margin-bottom: 20px;
+        }
 
-                #gameOver p {
-                              font-size: clamp(10px, 4vw, 16px);
-                              color: #ffff00;
-                              text-shadow: 0 0 10px #ffff00;
-                              margin: 10px 0;
-                }
+        #gameOver p {
+            font-size: clamp(10px, 4vw, 16px);
+            color: #ffff00;
+            text-shadow: 0 0 10px #ffff00;
+            margin: 10px 0;
+        }
 
-                #gameOver button, #gameOver a {
-                              background: #00ff00;
-                              color: #000;
-                              border: 2px solid #000;
-                              padding: clamp(8px, 3vw, 15px);
-                              font-size: clamp(10px, 3vw, 14px);
-                              font-family: 'Press Start 2P', cursive;
-                              cursor: pointer;
-                              margin: 10px;
-                              border-radius: 5px;
-                              text-decoration: none;
-                              display: inline-block;
-                }
+        #gameOver button, #gameOver a {
+            background: #00ff00;
+            color: #000;
+            border: 2px solid #000;
+            padding: clamp(8px, 3vw, 15px);
+            font-size: clamp(10px, 3vw, 14px);
+            font-family: 'Press Start 2P', cursive;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
 
-                #gameOver button:hover, #gameOver a:hover {
-                              background: #00ffff;
-                              text-shadow: 0 0 10px #00ffff;
-                }
-            </style>
-  </head>
-  <body>
-        <div id="gameContainer">
-                  <canvas id="gameCanvas"></canvas>canvas>
-                  <div id="gameUI">
-                                <div id="score">Distance: 0m</div>div>
-                                <div id="gameOver" style="display:none;">
-                                                  <h1>GAME OVER</h1>
-                                                <p id="finalScore">Distance: 0m</p>p>
-                                                <p id="message"></p>p>
-                                                <button onclick="location.reload()">Play Again</button>button>
-                                                <a href="index.html">Back to Main</a>a>
-                                </div>div>
-                  </div>div>
-        </div>div>
-  
-      <script>
-                const canvas = document.getElementById('gameCanvas');
-                const ctx = canvas.getContext('2d');
+        #gameOver button:hover, #gameOver a:hover {
+            background: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        <div id="gameUI">
+            <div id="score">Distance: 0m</div>
+            <div id="gameOver" style="display:none;">
+                <h1>GAME OVER</h1>
+                <p id="finalScore">Distance: 0m</p>
+                <p id="message"></p>
+                <button onclick="location.reload()">Play Again</button>
+                <a href="index.html">Back to Main</a>
+            </div>
+        </div>
+    </div>
 
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
 
-                const ship = {
-                              x: canvas.width / 2,
-                              y: canvas.height - 100,
-                              width: 30,
-                              height: 50,
-                              speed: 5,
-                              moveLeft: false,
-                              moveRight: false
-                };
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-                let gameActive = true;
-                let distance = 0;
-                let obstacles = [];
-                let scrollOffset = 0;
-                const RIVER_WIDTH = 150;
-                const RIVER_LEFT = (canvas.width - RIVER_WIDTH) / 2;
-                const RIVER_RIGHT = RIVER_LEFT + RIVER_WIDTH;
+        const ship = {
+            x: canvas.width / 2,
+            y: canvas.height - 100,
+            width: 30,
+            height: 50,
+            speed: 5,
+            moveLeft: false,
+            moveRight: false
+        };
 
-                window.addEventListener('keydown', (e) => {
-                              if (e.key === 'ArrowLeft') ship.moveLeft = true;
-                              if (e.key === 'ArrowRight') ship.moveRight = true;
+        let gameActive = true;
+        let distance = 0;
+        let obstacles = [];
+        let scrollOffset = 0;
+        const RIVER_WIDTH = Math.min(canvas.width * 0.6, 400);
+        const RIVER_LEFT = (canvas.width - RIVER_WIDTH) / 2;
+        const RIVER_RIGHT = RIVER_LEFT + RIVER_WIDTH;
+
+        let santas = [];
+        function createSantas() {
+            for (let i = 0; i < 15; i++) {
+                santas.push({
+                    x: RIVER_LEFT - 30 - Math.random() * 80,
+                    y: Math.random() * canvas.height,
+                    side: 'left'
                 });
-
-                window.addEventListener('keyup', (e) => {
-                              if (e.key === 'ArrowLeft') ship.moveLeft = false;
-                              if (e.key === 'ArrowRight') ship.moveRight = false;
+                santas.push({
+                    x: RIVER_RIGHT + 30 + Math.random() * 80,
+                    y: Math.random() * canvas.height,
+                    side: 'right'
                 });
+            }
+        }
+        createSantas();
 
-                let touchStartX = 0;
-                canvas.addEventListener('touchstart', (e) => {
-                              touchStartX = e.touches[0].clientX;
+        function drawSantas() {
+            santas.forEach(santa => {
+                const y = (santa.y + scrollOffset) % canvas.height;
+                ctx.font = '24px Arial';
+                ctx.fillText('🎅', santa.x - 12, y);
+            });
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') ship.moveLeft = true;
+            if (e.key === 'ArrowRight') ship.moveRight = true;
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft') ship.moveLeft = false;
+            if (e.key === 'ArrowRight') ship.moveRight = false;
+        });
+
+        let touchStartX = 0;
+        canvas.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (!gameActive) return;
+            const touchX = e.touches[0].clientX;
+            if (touchX < touchStartX - 10) ship.moveLeft = true;
+            else if (touchX > touchStartX + 10) ship.moveRight = true;
+            else {
+                ship.moveLeft = false;
+                ship.moveRight = false;
+            }
+        });
+
+        canvas.addEventListener('touchend', () => {
+            ship.moveLeft = false;
+            ship.moveRight = false;
+        });
+
+        function drawRiver() {
+            ctx.fillStyle = '#2a5a8a';
+            ctx.fillRect(RIVER_LEFT, 0, RIVER_WIDTH, canvas.height);
+
+            ctx.fillStyle = '#1a4a6a';
+            for (let i = 0; i < canvas.height; i += 40) {
+                const offset = (scrollOffset % 40);
+                ctx.fillRect(RIVER_LEFT, i + offset, RIVER_WIDTH, 2);
+            }
+
+            ctx.fillStyle = '#8B7355';
+            ctx.fillRect(RIVER_LEFT - 10, 0, 10, canvas.height);
+            ctx.fillRect(RIVER_RIGHT, 0, 10, canvas.height);
+
+            ctx.strokeStyle = '#654321';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(RIVER_LEFT, 0);
+            ctx.lineTo(RIVER_LEFT, canvas.height);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(RIVER_RIGHT, 0);
+            ctx.lineTo(RIVER_RIGHT, canvas.height);
+            ctx.stroke();
+        }
+
+        function drawShip() {
+            ctx.fillStyle = '#8b4513';
+            ctx.fillRect(ship.x - ship.width / 2, ship.y, ship.width, ship.height);
+
+            ctx.strokeStyle = '#ff6b00';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(ship.x - ship.width / 2, ship.y, ship.width, ship.height);
+
+            ctx.fillStyle = '#ffff00';
+            ctx.beginPath();
+            ctx.moveTo(ship.x - ship.width / 4, ship.y);
+            ctx.lineTo(ship.x + ship.width / 4, ship.y);
+            ctx.lineTo(ship.x, ship.y - 15);
+            ctx.fill();
+        }
+
+        function createObstacles() {
+            if (Math.random() < 0.02) {
+                const type = Math.random() < 0.5 ? 'stone' : 'tree';
+                const x = RIVER_LEFT + Math.random() * RIVER_WIDTH;
+                obstacles.push({
+                    x: x,
+                    y: -50,
+                    width: 40,
+                    height: 40,
+                    type: type
                 });
+            }
+        }
 
-                canvas.addEventListener('touchmove', (e) => {
-                              if (!gameActive) return;
-                              const touchX = e.touches[0].clientX;
-                              if (touchX < touchStartX - 10) ship.moveLeft = true;
-                              else if (touchX > touchStartX + 10) ship.moveRight = true;
-                              else {
-                                                ship.moveLeft = false;
-                                                ship.moveRight = false;
-                              }
-                });
+        function drawObstacles() {
+            obstacles.forEach((obs) => {
+                if (obs.type === 'stone') {
+                    ctx.fillStyle = '#d4d4d4';
+                    ctx.beginPath();
+                    ctx.arc(obs.x, obs.y, obs.width / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = '#a0a0a0';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                } else {
+                    ctx.fillStyle = '#228B22';
+                    ctx.beginPath();
+                    ctx.moveTo(obs.x, obs.y - 15);
+                    ctx.lineTo(obs.x - 15, obs.y + 5);
+                    ctx.lineTo(obs.x + 15, obs.y + 5);
+                    ctx.closePath();
+                    ctx.fill();
 
-                canvas.addEventListener('touchend', () => {
-                              ship.moveLeft = false;
-                              ship.moveRight = false;
-                });
+                    ctx.beginPath();
+                    ctx.moveTo(obs.x, obs.y - 5);
+                    ctx.lineTo(obs.x - 18, obs.y + 15);
+                    ctx.lineTo(obs.x + 18, obs.y + 15);
+                    ctx.closePath();
+                    ctx.fill();
 
-                function drawRiver() {
-                              ctx.fillStyle = '#1a5f7a';
-                              ctx.fillRect(RIVER_LEFT, 0, RIVER_WIDTH, canvas.height);
+                    ctx.beginPath();
+                    ctx.moveTo(obs.x, obs.y + 5);
+                    ctx.lineTo(obs.x - 20, obs.y + 25);
+                    ctx.lineTo(obs.x + 20, obs.y + 25);
+                    ctx.closePath();
+                    ctx.fill();
 
-                              ctx.strokeStyle = '#8B7355';
-                              ctx.lineWidth = 5;
-                              ctx.beginPath();
-                              ctx.moveTo(RIVER_LEFT, 0);
-                              ctx.lineTo(RIVER_LEFT, canvas.height);
-                              ctx.stroke();
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(obs.x - 3, obs.y + 25, 6, 10);
 
-                              ctx.beginPath();
-                              ctx.moveTo(RIVER_RIGHT, 0);
-                              ctx.lineTo(RIVER_RIGHT, canvas.height);
-                              ctx.stroke();
-
-                              ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-                              ctx.lineWidth = 1;
-                              for (let i = 0; i < canvas.height; i += 30) {
-                                                ctx.beginPath();
-                                                ctx.moveTo(RIVER_LEFT, i + scrollOffset % 30);
-                                                ctx.lineTo(RIVER_RIGHT, i + scrollOffset % 30);
-                                                ctx.stroke();
-                              }
+                    ctx.fillStyle = '#ff0000';
+                    ctx.beginPath();
+                    ctx.arc(obs.x - 8, obs.y, 3, 0, Math.PI * 2);
+                    ctx.arc(obs.x + 8, obs.y + 8, 3, 0, Math.PI * 2);
+                    ctx.arc(obs.x, obs.y + 15, 3, 0, Math.PI * 2);
+                    ctx.fill();
                 }
+            });
+        }
 
-                function drawShip() {
-                              ctx.fillStyle = '#8b4513';
-                              ctx.fillRect(ship.x - ship.width / 2, ship.y, ship.width, ship.height);
+        function updateObstacles() {
+            obstacles = obstacles.filter(obs => {
+                obs.y += 3;
+                return obs.y < canvas.height;
+            });
+        }
 
-                              ctx.strokeStyle = '#ff6b00';
-                              ctx.lineWidth = 2;
-                              ctx.strokeRect(ship.x - ship.width / 2, ship.y, ship.width, ship.height);
+        function checkCollisions() {
+            obstacles.forEach((obs) => {
+                const shipLeft = ship.x - ship.width / 2;
+                const shipRight = ship.x + ship.width / 2;
+                const shipTop = ship.y;
+                const shipBottom = ship.y + ship.height;
 
-                              ctx.fillStyle = '#ffff00';
-                              ctx.beginPath();
-                              ctx.moveTo(ship.x - ship.width / 4, ship.y);
-                              ctx.lineTo(ship.x + ship.width / 4, ship.y);
-                              ctx.lineTo(ship.x, ship.y - 15);
-                              ctx.fill();
+                const obsLeft = obs.x - obs.width / 2;
+                const obsRight = obs.x + obs.width / 2;
+                const obsTop = obs.y;
+                const obsBottom = obs.y + obs.height;
+
+                if (shipRight > obsLeft && shipLeft < obsRight &&
+                    shipBottom > obsTop && shipTop < obsBottom) {
+                    endGame(`CRASHED INTO ${obs.type === 'tree' ? 'CHRISTMAS TREE' : obs.type.toUpperCase()}!`);
                 }
+            });
 
-                function createObstacles() {
-                              if (Math.random() < 0.02) {
-                                                const type = Math.random() < 0.5 ? 'stone' : 'log';
-                                                const x = RIVER_LEFT + Math.random() * RIVER_WIDTH;
-                                                obstacles.push({
-                                                                      x: x,
-                                                                      y: -50,
-                                                                      width: 40,
-                                                                      height: 40,
-                                                                      type: type
-                                                });
-                              }
-                }
+            const shipLeft = ship.x - ship.width / 2;
+            const shipRight = ship.x + ship.width / 2;
 
-                function drawObstacles() {
-                              obstacles.forEach((obs) => {
-                                                if (obs.type === 'stone') {
-                                                                      ctx.fillStyle = '#808080';
-                                                                      ctx.beginPath();
-                                                                      ctx.arc(obs.x, obs.y, obs.width / 2, 0, Math.PI * 2);
-                                                                      ctx.fill();
-                                                                      ctx.strokeStyle = '#404040';
-                                                                      ctx.lineWidth = 2;
-                                                                      ctx.stroke();
-                                                } else {
-                                                                      ctx.fillStyle = '#654321';
-                                                                      ctx.fillRect(obs.x - obs.width / 2, obs.y, obs.width, obs.height);
-                                                                      ctx.strokeStyle = '#8b4513';
-                                                                      ctx.lineWidth = 2;
-                                                                      ctx.strokeRect(obs.x - obs.width / 2, obs.y, obs.width, obs.height);
-                                                }
-                              });
-                }
+            if (shipLeft < RIVER_LEFT || shipRight > RIVER_RIGHT) {
+                endGame('CRASHED INTO BANK!');
+            }
+        }
 
-                function updateObstacles() {
-                              obstacles = obstacles.filter(obs => {
-                                                obs.y += 3;
-                                                return obs.y < canvas.height;
-                              });
-                }
+        function endGame(message) {
+            gameActive = false;
+            document.getElementById('gameOver').style.display = 'block';
+            document.getElementById('finalScore').textContent = `Distance: ${Math.floor(distance)}m`;
+            document.getElementById('message').textContent = message;
+        }
 
-                function checkCollisions() {
-                              obstacles.forEach((obs) => {
-                                                const shipLeft = ship.x - ship.width / 2;
-                                                const shipRight = ship.x + ship.width / 2;
-                                                const shipTop = ship.y;
-                                                const shipBottom = ship.y + ship.height;
+        function updateGame() {
+            if (!gameActive) return;
 
-                                                const obsLeft = obs.x - obs.width / 2;
-                                                const obsRight = obs.x + obs.width / 2;
-                                                const obsTop = obs.y;
-                                                const obsBottom = obs.y + obs.height;
+            if (ship.moveLeft && ship.x > RIVER_LEFT + ship.width / 2) {
+                ship.x -= ship.speed;
+            }
+            if (ship.moveRight && ship.x < RIVER_RIGHT - ship.width / 2) {
+                ship.x += ship.speed;
+            }
 
-                                                if (shipRight > obsLeft && shipLeft < obsRight &&
-                                                                        shipBottom > obsTop && shipTop < obsBottom) {
-                                                                      endGame(`CRASHED INTO ${obs.type.toUpperCase()}!`);
-                                                }
-                              });
+            distance += 0.5;
+            scrollOffset += 3;
+            document.getElementById('score').textContent = `Distance: ${Math.floor(distance)}m`;
 
-                              const shipLeft = ship.x - ship.width / 2;
-                              const shipRight = ship.x + ship.width / 2;
+            if (distance > 5000) {
+                endGame('REACHED VIKINGSKIPET! 🏆');
+            }
+        }
 
-                              if (shipLeft < RIVER_LEFT || shipRight > RIVER_RIGHT) {
-                                                endGame('CRASHED INTO BANK!');
-                              }
-                }
+        function gameLoop() {
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                function endGame(message) {
-                              gameActive = false;
-                              document.getElementById('gameOver').style.display = 'block';
-                              document.getElementById('finalScore').textContent = `Distance: ${Math.floor(distance)}m`;
-                              document.getElementById('message').textContent = message;
-                }
+            drawRiver();
+            drawSantas();
+            createObstacles();
+            updateObstacles();
+            drawObstacles();
+            checkCollisions();
+            drawShip();
+            updateGame();
 
-                function updateGame() {
-                              if (!gameActive) return;
+            requestAnimationFrame(gameLoop);
+        }
 
-                              if (ship.moveLeft && ship.x > RIVER_LEFT + ship.width / 2) {
-                                                ship.x -= ship.speed;
-                              }
-                              if (ship.moveRight && ship.x < RIVER_RIGHT - ship.width / 2) {
-                                                ship.x += ship.speed;
-                              }
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
 
-                              distance += 0.5;
-                              scrollOffset += 3;
-                              document.getElementById('score').textContent = `Distance: ${Math.floor(distance)}m`;
-
-                              if (distance > 5000) {
-                                                endGame('REACHED VIKINGSKIPET! 🏆');
-                              }
-                }
-
-                function gameLoop() {
-                              ctx.fillStyle = '#0a0a0a';
-                              ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                              drawRiver();
-                              createObstacles();
-                              updateObstacles();
-                              drawObstacles();
-                              checkCollisions();
-                              drawShip();
-                              updateGame();
-
-                              requestAnimationFrame(gameLoop);
-                }
-
-                window.addEventListener('resize', () => {
-                              canvas.width = window.innerWidth;
-                              canvas.height = window.innerHeight;
-                });
-
-                gameLoop();
-      </script>
-  </body>
-</html>html>
-      </script></h1>
-  </body>
-      </style></title>
-  </head>
+        gameLoop();
+    </script>
+</body>
+</html>
