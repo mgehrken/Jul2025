@@ -1,4 +1,215 @@
-<!DOCTYPE html>
+0 20px rgba(0, 255, 255, 0.1);
+  margin-top: 20px;
+  }
+  
+  .title {
+    text-align: center;
+      color: #00ff00;
+        font-size: 32px;
+          text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+            margin-bottom: 10px;
+              line-height: 1.4;
+              }
+              
+              .subtitle {
+                text-align: center;
+                  color: #ffff00;
+                    font-size: 14px;
+                      text-shadow: 0 0 10px #ffff00;
+                        margin-bottom: 30px;
+                        }
+                        
+                        .from-text {
+                          text-align: center;
+                            color: #ff00ff;
+                              font-size: 16px;
+                                font-weight: bold;
+                                  text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff;
+                                    margin: 20px 0;
+                                      letter-spacing: 2px;
+                                      }
+                                      
+                                      .button-group {
+                                        display: flex;
+                                          gap: 10px;
+                                            justify-content: center;
+                                              margin: 25px 0;
+                                                flex-wrap: wrap;
+                                                }
+                                                
+                                                .nav-button {
+                                                  background: transparent;
+                                                    color: #00ffff;
+                                                      border: 2px solid #00ffff;
+                                                        padding: 8px 15px;
+                                                          font-size: 12px;
+                                                            cursor: pointer;
+                                                              text-shadow: 0 0 10px #00ffff;
+                                                                box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+                                                                  transition: all 0.3s;
+                                                                    font-family: 'Press Start 2P', sans-serif;
+                                                                    }
+                                                                    
+                                                                    .nav-button:hover {
+                                                                      background: rgba(0, 255, 255, 0.2);
+                                                                        box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+                                                                        }
+                                                                        
+                                                                        .menu-section {
+                                                                          background: rgba(0, 0, 0, 0.5);
+                                                                            border: 2px solid #ff00ff;
+                                                                              border-radius: 5px;
+                                                                                padding: 15px;
+                                                                                  margin: 20px 0;
+                                                                                    box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+                                                                                    }
+                                                                                    
+                                                                                    .menu-item {
+                                                                                      color: #ff00ff;
+                                                                                        font-size: 14px;
+                                                                                          margin: 8px 0;
+                                                                                            text-shadow: 0 0 8px #ff00ff;
+                                                                                            }
+                                                                                            
+                                                                                            .respawn-section {
+                                                                                              background: rgba(0, 0, 0, 0.5);
+                                                                                                border: 2px solid #ffff00;
+                                                                                                  border-radius: 5px;
+                                                                                                    padding: 15px;
+                                                                                                      margin: 20px 0;
+                                                                                                        box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
+                                                                                                          text-align: center;
+                                                                                                          }
+                                                                                                          
+                                                                                                          .respawn-title {
+                                                                                                            color: #ffff00;
+                                                                                                              font-size: 12px;
+                                                                                                                text-shadow: 0 0 8px #ffff00;
+                                                                                                                  margin-bottom: 8px;
+                                                                                                                  }
+                                                                                                                  
+                                                                                                                  .respawn-name {
+                                                                                                                    color: #ffff00;
+                                                                                                                      font-size: 16px;
+                                                                                                                        text-shadow: 0 0 10px #ffff00;
+                                                                                                                          margin: 8px 0;
+                                                                                                                          }
+                                                                                                                          
+                                                                                                                          .respawn-hp {
+                                                                                                                            color: #ffff00;
+                                                                                                                              font-size: 12px;
+                                                                                                                                text-shadow: 0 0 8px #ffff00;
+                                                                                                                                  margin-top: 8px;
+                                                                                                                                  }
+                                                                                                                                  
+                                                                                                                                  .loot-section {
+                                                                                                                                    background: rgba(0, 0, 0, 0.5);
+                                                                                                                                      border: 2px solid #ffff00;
+                                                                                                                                        border-radius: 5px;
+                                                                                                                                          padding: 15px;
+                                                                                                                                            margin: 20px 0;
+                                                                                                                                              text-align: center;
+                                                                                                                                                box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
+                                                                                                                                                }
+                                                                                                                                                
+                                                                                                                                                .loot-title {
+                                                                                                                                                  color: #ffff00;
+                                                                                                                                                    font-size: 14px;
+                                                                                                                                                      text-shadow: 0 0 10px #ffff00;
+                                                                                                                                                      }
+                                                                                                                                                      
+                                                                                                                                                      .icon-grid {
+                                                                                                                                                        display: grid;
+                                                                                                                                                          grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+                                                                                                                                                            gap: 15px;
+                                                                                                                                                              margin-top: 20px;
+                                                                                                                                                                justify-items: center;
+                                                                                                                                                                }
+                                                                                                                                                                
+                                                                                                                                                                .icon-box {
+                                                                                                                                                                  width: 60px;
+                                                                                                                                                                    height: 60px;
+                                                                                                                                                                      display: flex;
+                                                                                                                                                                        align-items: center;
+                                                                                                                                                                          justify-content: center;
+                                                                                                                                                                            font-size: 30px;
+                                                                                                                                                                              border: 2px solid;
+                                                                                                                                                                                border-radius: 5px;
+                                                                                                                                                                                  box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+                                                                                                                                                                                    background: rgba(0, 0, 0, 0.3);
+                                                                                                                                                                                    }
+                                                                                                                                                                                    
+                                                                                                                                                                                    .icon-pizza { border-color: #ff6b6b; background: rgba(255, 107, 107, 0.2); }
+                                                                                                                                                                                    .icon-sleep { border-color: #4ecdc4; background: rgba(78, 205, 196, 0.2); }
+                                                                                                                                                                                    .icon-game { border-color: #ffe66d; background: rgba(255, 230, 109, 0.2); }
+                                                                                                                                                                                    .icon-replay { border-color: #95e1d3; background: rgba(149, 225, 211, 0.2); }
+                                                                                                                                                                                    
+                                                                                                                                                                                    .game-link {
+                                                                                                                                                                                      display: inline-block;
+                                                                                                                                                                                        margin-top: 20px;
+                                                                                                                                                                                          padding: 10px 20px;
+                                                                                                                                                                                            background: #ff00ff;
+                                                                                                                                                                                              color: #000;
+                                                                                                                                                                                                text-decoration: none;
+                                                                                                                                                                                                  border: 2px solid #ff00ff;
+                                                                                                                                                                                                    border-radius: 5px;
+                                                                                                                                                                                                      font-size: 12px;
+                                                                                                                                                                                                        font-weight: bold;
+                                                                                                                                                                                                          text-shadow: none;
+                                                                                                                                                                                                            box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+                                                                                                                                                                                                              transition: all 0.3s;
+                                                                                                                                                                                                                font-family: 'Press Start 2P', sans-serif;
+                                                                                                                                                                                                                }
+                                                                                                                                                                                                                
+                                                                                                                                                                                                                .game-link:hover {
+                                                                                                                                                                                                                  background: #ff00ff;
+                                                                                                                                                                                                                    box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                    </style>
+                                                                                                                                                                                                                    </head>
+                                                                                                                                                                                                                    <body>
+                                                                                                                                                                                                                    <div class="gift-card">
+                                                                                                                                                                                                                      <div class="title">THE<br>GATHERING</div>
+                                                                                                                                                                                                                        <div class="subtitle">VIKINGSKIPET 2025</div>
+                                                                                                                                                                                                                          
+                                                                                                                                                                                                                            <div class="from-text">MAMMA OG PAPPA</div>
+                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                <div class="button-group">
+                                                                                                                                                                                                                                    <button class="nav-button">R</button>
+                                                                                                                                                                                                                                        <button class="nav-button">X</button>
+                                                                                                                                                                                                                                            <button class="nav-button">B</button>
+                                                                                                                                                                                                                                              </div>
+                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                <div class="menu-section">
+                                                                                                                                                                                                                                                    <div class="menu-item">🍕 EAT</div>
+                                                                                                                                                                                                                                                        <div class="menu-item">😴 SLEEP</div>
+                                                                                                                                                                                                                                                            <div class="menu-item">🎮 GAME</div>
+                                                                                                                                                                                                                                                                <div class="menu-item">🔄 REPEAT</div>
+                                                                                                                                                                                                                                                                  </div>
+                                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                    <div class="respawn-section">
+                                                                                                                                                                                                                                                                        <div class="respawn-title">⭐ RESPAWN ⭐</div>
+                                                                                                                                                                                                                                                                            <div class="respawn-name">SCANDIC<br>HAMAR</div>
+                                                                                                                                                                                                                                                                                <div class="respawn-hp">HP: MAX</div>
+                                                                                                                                                                                                                                                                                  </div>
+                                                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                    <div class="loot-section">
+                                                                                                                                                                                                                                                                                        <div class="loot-title">✕ LEGENDARY LOOT ✕</div>
+                                                                                                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                                            <div class="icon-grid">
+                                                                                                                                                                                                                                                                                                <div class="icon-box icon-pizza">🍕</div>
+                                                                                                                                                                                                                                                                                                    <div class="icon-box icon-sleep">😴</div>
+                                                                                                                                                                                                                                                                                                        <div class="icon-box icon-game">🎮</div>
+                                                                                                                                                                                                                                                                                                            <div class="icon-box icon-replay">🔄</div>
+                                                                                                                                                                                                                                                                                                              </div>
+                                                                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                                <div style="text-align: center; margin-top: 30px;">
+                                                                                                                                                                                                                                                                                                                    <a href="https://mgehrken.github.io/Jul2025/game.html" class="game-link">PLAY GAME</a>
+                                                                                                                                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                                                                                                                                      </body>
+                                                                                                                                                                                                                                                                                                                      </html><!DOCTYPE html>
 <html lang="no">
   <head>
         <meta charset="UTF-8">
