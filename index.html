@@ -1,351 +1,95 @@
 <!DOCTYPE html>
 <html lang="no">
     <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>The Gathering 2025 - Gift Card</title>
-        <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-                    * {
-                                    margin: 0;
-                                    padding: 0;
-                                    box-sizing: border-box;
-                    }
-
-                    html {
-                                    width: 100%;
-                                    height: auto;
-                    }
-
-                    body {
-                                    background: #0a0a0a;
-                                    width: 100%;
-                                    min-height: 100vh;
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: flex-start;
-                                    font-family: 'Press Start 2P', cursive;
-                                    padding: 15px;
-                                    overflow-x: hidden;
-                                    overflow-y: auto;
-                    }
-
-                    .gift-card {
-                                    width: 100%;
-                                    max-width: 500px;
-                                    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-                                    border: 3px solid #00ff00;
-                                    position: relative;
-                                    overflow: visible;
-                                    display: flex;
-                                    flex-direction: column;
-                                    justify-content: flex-start;
-                                    align-items: center;
-                                    padding: 20px;
-                                    animation: borderPulse 2s infinite;
-                                    gap: 15px;
-                    }
-
-                    @keyframes borderPulse {
-                                    0%, 100% { border-color: #00ff00; }
-                                    25% { border-color: #00ffff; }
-                                    50% { border-color: #ff00ff; }
-                                    75% { border-color: #ffff00; }
-                    }
-
-                    .scanlines {
-                                    position: absolute;
-                                    top: 0;
-                                    left: 0;
-                                    width: 100%;
-                                    height: 100%;
-                                    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0px, transparent 1px, transparent 2px, rgba(0, 0, 0, 0.15) 3px);
-                                    pointer-events: none;
-                                    z-index: 1;
-                    }
-
-                    .stars {
-                                    position: absolute;
-                                    width: 100%;
-                                    height: 100%;
-                                    top: 0;
-                                    left: 0;
-                                    background-image: radial-gradient(2px 2px at 20% 30%, white, transparent), radial-gradient(2px 2px at 60% 70%, white, transparent), radial-gradient(1px 1px at 50% 50%, white, transparent);
-                                    background-size: 200% 200%;
-                                    animation: twinkle 8s ease-in-out infinite;
-                                    opacity: 0.6;
-                                    pointer-events: none;
-                                    z-index: 1;
-                    }
-
-                    @keyframes twinkle {
-                                    0%, 100% { opacity: 0.4; }
-                                    50% { opacity: 0.8; }
-                    }
-
-                    .content {
-                                    position: relative;
-                                    z-index: 5;
-                                    display: flex;
-                                    flex-direction: column;
-                                    justify-content: flex-start;
-                                    align-items: center;
-                                    width: 100%;
-                                    gap: 15px;
-                    }
-
-                    .title {
-                                    text-align: center;
-                                    width: 100%;
-                    }
-
-                    .title h1 {
-                                    font-size: 24px;
-                                    color: #00ff00;
-                                    text-shadow: 3px 3px 0 #000, 0 0 20px #00ff00, 0 0 40px #00ff00;
-                                    margin: 0;
-                                    animation: titleGlow 2s ease-in-out infinite;
-                    }
-
-                    @keyframes titleGlow {
-                                    0%, 100% { text-shadow: 3px 3px 0 #000, 0 0 20px #00ff00, 0 0 40px #00ff00; }
-                                    50% { text-shadow: 3px 3px 0 #000, 0 0 30px #00ffff, 0 0 60px #00ffff; }
-                    }
-
-                    .subtitle {
-                                    font-size: 10px;
-                                    color: #ffff00;
-                                    text-shadow: 2px 2px 0 #000, 0 0 10px #ffff00;
-                                    text-align: center;
-                    }
-
-                    .runes {
-                                    font-size: 16px;
-                                    color: #00ffff;
-                                    text-shadow: 0 0 20px #00ffff;
-                                    letter-spacing: 4px;
-                                    opacity: 0.6;
-                                    text-align: center;
-                    }
-
-                    .badges-container {
-                                    display: flex;
-                                    gap: 10px;
-                                    justify-content: center;
-                                    flex-wrap: wrap;
-                                    width: 100%;
-                    }
-
-                    .life-cycle {
-                                    flex: 1;
-                                    min-width: 130px;
-                                    background: rgba(0, 0, 0, 0.9);
-                                    border: 2px solid #ff00ff;
-                                    padding: 12px;
-                                    box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
-                                    animation: cyclePulse 3s ease-in-out infinite;
-                                    text-align: center;
-                    }
-
-                    .life-cycle p {
-                                    font-size: 8px;
-                                    color: #ff00ff;
-                                    text-shadow: 0 0 8px #ff00ff;
-                                    margin: 4px 0;
-                    }
-
-                    @keyframes cyclePulse {
-                                    0%, 100% { transform: scale(1); }
-                                    50% { transform: scale(1.05); }
-                    }
-
-                    .hotel-badge {
-                                    flex: 1;
-                                    min-width: 130px;
-                                    background: rgba(0, 0, 0, 0.9);
-                                    border: 2px solid #ffd700;
-                                    padding: 12px;
-                                    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-                                    text-align: center;
-                    }
-
-                    .hotel-badge p {
-                                    font-size: 8px;
-                                    color: #ffd700;
-                                    text-shadow: 0 0 8px #ffd700;
-                                    margin: 3px 0;
-                    }
-
-                    .hotel-badge .big {
-                                    font-size: 10px;
-                                    color: #ffffff;
-                                    margin: 4px 0;
-                                    font-weight: bold;
-                    }
-
-                    .achievement {
-                                    background: rgba(0, 0, 0, 0.9);
-                                    border: 2px solid #ffd700;
-                                    padding: 12px;
-                                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-                                    text-align: center;
-                                    width: 100%;
-                    }
-
-                    .achievement p {
-                                    font-size: 10px;
-                                    color: #ffd700;
-                                    text-shadow: 0 0 10px #ffd700;
-                                    margin: 0;
-                    }
-
-                    .power-ups {
-                                    display: flex;
-                                    gap: 10px;
-                                    justify-content: center;
-                                    flex-wrap: wrap;
-                                    width: 100%;
-                    }
-
-                    .power-up {
-                                    width: 45px;
-                                    height: 45px;
-                                    border: 2px solid #000;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    font-size: 22px;
-                                    animation: bounce 1s ease-in-out infinite;
-                                    flex-shrink: 0;
-                    }
-
-                    .power-up:nth-child(1) {
-                                    background: #ff6b6b;
-                                    box-shadow: 0 0 15px #ff6b6b;
-                    }
-
-                    .power-up:nth-child(2) {
-                                    background: #4ecdc4;
-                                    box-shadow: 0 0 15px #4ecdc4;
-                                    animation-delay: 0.2s;
-                    }
-
-                    .power-up:nth-child(3) {
-                                    background: #ffe66d;
-                                    box-shadow: 0 0 15px #ffe66d;
-                                    animation-delay: 0.4s;
-                    }
-
-                    .power-up:nth-child(4) {
-                                    background: #95e1d3;
-                                    box-shadow: 0 0 15px #95e1d3;
-                                    animation-delay: 0.6s;
-                    }
-
-                    @keyframes bounce {
-                                    0%, 100% { transform: translateY(0); }
-                                    50% { transform: translateY(-6px); }
-                    }
-
-                    .info-box {
-                                    background: rgba(0, 0, 0, 0.8);
-                                    border: 3px solid #00ffff;
-                                    padding: 15px;
-                                    text-align: center;
-                                    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
-                                    width: 100%;
-                    }
-
-                    .info-box p {
-                                    font-size: 8px;
-                                    color: #ffffff;
-                                    margin: 5px 0;
-                                    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-                    }
-
-                    .info-box .highlight {
-                                    color: #ff00ff;
-                                    text-shadow: 0 0 10px #ff00ff;
-                                    font-weight: bold;
-                    }
-
-                    .from-text {
-                                    font-size: 14px !important;
-                                    color: #ff00ff !important;
-                                    text-shadow: 0 0 15px #ff00ff !important;
-                                    margin: 8px 0 !important;
-                                    font-weight: bold;
-                                    letter-spacing: 1px;
-                    }
-
-                    .game-button {
-                                    background: #ff00ff;
-                                    color: #00ff00;
-                                    border: 3px solid #ff00ff;
-                                    padding: 10px 20px;
-                                    text-decoration: none;
-                                    font-size: 11px;
-                                    box-shadow: 0 0 20px #ff00ff;
-                                    border-radius: 5px;
-                                    display: inline-block;
-                                    text-shadow: 0 0 10px #ff00ff;
-                                    margin-top: 8px;
-                                    transition: all 0.3s;
-                    }
-
-                    .game-button:hover {
-                                    transform: scale(1.05);
-                                    box-shadow: 0 0 30px #ff00ff;
-                    }
-                </style>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Gathering 2025 - Gift Card</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { width: 100%; height: auto; }
+        body { background: #0a0a0a; width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; font-family: 'Press Start 2P', cursive; padding: 15px; overflow-x: hidden; overflow-y: auto; }
+        .gift-card { width: 100%; max-width: 500px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border: 3px solid #00ff00; position: relative; overflow: visible; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 20px; animation: borderPulse 2s infinite; gap: 15px; }
+        @keyframes borderPulse { 0%, 100% { border-color: #00ff00; } 25% { border-color: #00ffff; } 50% { border-color: #ff00ff; } 75% { border-color: #ffff00; } }
+        .scanlines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0px, transparent 1px, transparent 2px, rgba(0, 0, 0, 0.15) 3px); pointer-events: none; z-index: 1; }
+        .stars { position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-image: radial-gradient(2px 2px at 20% 30%, white, transparent), radial-gradient(2px 2px at 60% 70%, white, transparent), radial-gradient(1px 1px at 50% 50%, white, transparent); background-size: 200% 200%; animation: twinkle 8s ease-in-out infinite; opacity: 0.6; pointer-events: none; z-index: 1; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
+        .content { position: relative; z-index: 5; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; width: 100%; gap: 15px; }
+        .title { text-align: center; width: 100%; }
+        .title h1 { font-size: 24px; color: #00ff00; text-shadow: 3px 3px 0 #000, 0 0 20px #00ff00, 0 0 40px #00ff00; margin: 0; animation: titleGlow 2s ease-in-out infinite; }
+        @keyframes titleGlow { 0%, 100% { text-shadow: 3px 3px 0 #000, 0 0 20px #00ff00, 0 0 40px #00ff00; } 50% { text-shadow: 3px 3px 0 #000, 0 0 30px #00ffff, 0 0 60px #00ffff; } }
+        .subtitle { font-size: 10px; color: #ffff00; text-shadow: 2px 2px 0 #000, 0 0 10px #ffff00; text-align: center; }
+        .runes { font-size: 16px; color: #00ffff; text-shadow: 0 0 20px #00ffff; letter-spacing: 4px; opacity: 0.6; text-align: center; }
+        .badges-container { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; width: 100%; }
+        .life-cycle { flex: 1; min-width: 130px; background: rgba(0, 0, 0, 0.9); border: 2px solid #ff00ff; padding: 12px; box-shadow: 0 0 15px rgba(255, 0, 255, 0.6); animation: cyclePulse 3s ease-in-out infinite; text-align: center; }
+        .life-cycle p { font-size: 8px; color: #ff00ff; text-shadow: 0 0 8px #ff00ff; margin: 4px 0; }
+        @keyframes cyclePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .hotel-badge { flex: 1; min-width: 130px; background: rgba(0, 0, 0, 0.9); border: 2px solid #ffd700; padding: 12px; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); text-align: center; }
+        .hotel-badge p { font-size: 8px; color: #ffd700; text-shadow: 0 0 8px #ffd700; margin: 3px 0; }
+        .hotel-badge .big { font-size: 10px; color: #ffffff; margin: 4px 0; font-weight: bold; }
+        .achievement { background: rgba(0, 0, 0, 0.9); border: 2px solid #ffd700; padding: 12px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); text-align: center; width: 100%; }
+        .achievement p { font-size: 10px; color: #ffd700; text-shadow: 0 0 10px #ffd700; margin: 0; }
+        .power-ups { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; width: 100%; }
+        .power-up { width: 45px; height: 45px; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-size: 22px; animation: bounce 1s ease-in-out infinite; flex-shrink: 0; }
+        .power-up:nth-child(1) { background: #ff6b6b; box-shadow: 0 0 15px #ff6b6b; }
+        .power-up:nth-child(2) { background: #4ecdc4; box-shadow: 0 0 15px #4ecdc4; animation-delay: 0.2s; }
+        .power-up:nth-child(3) { background: #ffe66d; box-shadow: 0 0 15px #ffe66d; animation-delay: 0.4s; }
+        .power-up:nth-child(4) { background: #95e1d3; box-shadow: 0 0 15px #95e1d3; animation-delay: 0.6s; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        .info-box { background: rgba(0, 0, 0, 0.8); border: 3px solid #00ffff; padding: 15px; text-align: center; box-shadow: 0 0 20px rgba(0, 255, 255, 0.6); width: 100%; }
+        .info-box p { font-size: 8px; color: #ffffff; margin: 5px 0; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+        .info-box .highlight { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; font-weight: bold; }
+        .from-text { font-size: 14px !important; color: #ff00ff !important; text-shadow: 0 0 15px #ff00ff !important; margin: 8px 0 !important; font-weight: bold; letter-spacing: 1px; }
+        .game-button { background: #ff00ff; color: #00ff00; border: 3px solid #ff00ff; padding: 10px 20px; text-decoration: none; font-size: 11px; box-shadow: 0 0 20px #ff00ff; border-radius: 5px; display: inline-block; text-shadow: 0 0 10px #ff00ff; margin-top: 8px; transition: all 0.3s; }
+        .game-button:hover { transform: scale(1.05); box-shadow: 0 0 30px #ff00ff; }
+        </style>
     </head>
     <body>
-            <div class="gift-card">
-                        <div class="scanlines"></div>div>
-                        <div class="stars"></div>div>
-                        <div class="content">
-                                        <div class="title">
-                                                            <h1>THE GATHERING</h1>
-                                                        <div class="subtitle">▸ VIKINGSKIPET 2025 ◂</div>div>
-                                        </div>div>
-                                    <div class="runes">ᚱ ᚷ ᛒ</div>div>
-                                    <div class="badges-container">
-                                                    <div class="life-cycle">
-                                                                        <p>🍕 EAT</p>
-                                                                        <p>😴 SLEEP</p>
-                                                                        <p>🎮 GAME</p>
-                                                                        <p>🔁 REPEAT</p>
-                                                    </div>div>
-                                                    <div class="hotel-badge">
-                                                                        <p>⭐ RESPAWN ⭐</p>
-                                                                        <p class="big">SCANDIC</p>
-                                                                        <p class="big">HAMAR</p>
-                                                                        <p>━━━━━━</p>
-                                                                        <p>HP: MAX</p>
-                                                    </div>div>
-                                    </div>div>
-                                    <div class="achievement">
-                                                    <p>⚔ LEGENDARY LOOT ⚔</p>
-                                    </div>div>
-                                    <div class="power-ups">
-                                                    <div class="power-up">🍕</div>div>
-                                                    <div class="power-up">😴</div>div>
-                                                    <div class="power-up">🎮</div>div>
-                                                    <div class="power-up">🔁</div>div>
-                                    </div>div>
-                                    <div class="info-box">
-                                                    <p>━━━━━━━━━━━</p>
-                                                    <p>🎮 <span class="highlight">MERCH PACKAGE</span>span> 🎮</p>
-                                                    <p>⚔ READY FOR BATTLE ⚔</p>
-                                                    <p>━━━━━━━━━━━</p>
-                                                    <p class="from-text">FROM: MAMMA OG PAPPA</p>
-                                                    <a href="game.html" class="game-button">PLAY VIKING RACE</a>a>
-                                    </div>div>
-                        </div>div>
+        <div class="gift-card">
+            <div class="scanlines"></div>div>
+            <div class="stars"></div>div>
+            <div class="content">
+                <div class="title">
+                    <h1>THE GATHERING</h1>
+                <div class="subtitle">▸ VIKINGSKIPET 2025 ◂</div>div>
+                </div>div>
+            <div class="runes">ᚱ ᚷ ᛒ</div>div>
+            <div class="badges-container">
+            <div class="life-cycle">
+            <p>🍕 EAT</p>
+            <p>😴 SLEEP</p>
+            <p>🎮 GAME</p>
+            <p>🔁 REPEAT</p>
             </div>div>
+            <div class="hotel-badge">
+            <p>⭐ RESPAWN ⭐</p>
+            <p class="big">SCANDIC</p>
+            <p class="big">HAMAR</p>
+            <p>━━━━━━</p>
+            <p>HP: MAX</p>
+            </div>div>
+            </div>div>
+            <div class="achievement">
+            <p>⚔ LEGENDARY LOOT ⚔</p>
+            </div>div>
+            <div class="power-ups">
+            <div class="power-up">🍕</div>div>
+            <div class="power-up">😴</div>div>
+            <div class="power-up">🎮</div>div>
+            <div class="power-up">🔁</div>div>
+            </div>div>
+            <div class="info-box">
+            <p>━━━━━━━━━━━</p>
+            <p>🎮 <span class="highlight">MERCH PACKAGE</span>span> 🎮</p>
+            <p>⚔ READY FOR BATTLE ⚔</p>
+            <p>━━━━━━━━━━━</p>
+            <p class="from-text">FROM: MAMMA OG PAPPA</p>
+            <a href="game.html" class="game-button">PLAY VIKING RACE</a>a>
+            </div>div>
+            </div>div>
+        </div>div>
     </body>
 </html>html></p></p></h1>
     </body>
-        </style></title>
+    </style></title>
     </head>
