@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Gathering 2025 - Gift Card</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Press Start 2P', cursive;
+            padding: 20px;
+        }
+        
+        .gift-card {
+            width: 800px;
+            height: 500px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border: 8px solid #00ff00;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 0, 0.5),
+                inset 0 0 60px rgba(0, 100, 255, 0.3),
+                0 0 100px rgba(255, 0, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            image-rendering: pixelated;
+            animation: borderPulse 2s infinite;
+        }
+        
+        @keyframes borderPulse {
+            0%, 100% { border-color: #00ff00; }
+            25% { border-color: #00ffff; }
+            50% { border-color: #ff00ff; }
+            75% { border-color: #ffff00; }
+        }
+        
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 0, 0, 0.15) 3px
+            );
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent),
+                radial-gradient(1px 1px at 80% 10%, white, transparent),
+                radial-gradient(2px 2px at 90% 60%, white, transparent),
+                radial-gradient(1px 1px at 33% 80%, white, transparent),
+                radial-gradient(1px 1px at 15% 70%, white, transparent);
+            background-size: 200% 200%;
+            animation: twinkle 8s ease-in-out infinite;
+            opacity: 0.6;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        
+        .viking-ship {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 150px;
+        }
+        
+        .ship-body {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
+            height: 60px;
+            background: linear-gradient(180deg, #8b4513 0%, #654321 100%);
+            border: 4px solid #000;
+            border-radius: 0 0 40% 40%;
+            box-shadow: 
+                inset 0 -10px 20px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(0, 255, 255, 0.5);
+        }
+        
+        .ship-detail {
+            position: absolute;
+            width: 100%;
+            height: 8px;
+            background: repeating-linear-gradient(
+                90deg,
+                #000 0px,
+                #000 20px,
+                transparent 20px,
+                transparent 40px
+            );
+            bottom: 20px;
+        }
+        
+        .oars {
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            bottom: -20px;
+        }
+        
+        .oar {
+            position: absolute;
+            width: 60px;
+            height: 4px;
+            background: #654321;
+            border: 2px solid #000;
+            transform-origin: right center;
+            animation: row 1.5s ease-in-out infinite;
+        }
+        
+        .oar:nth-child(1) { left: 20px; animation-delay: 0s; }
+        .oar:nth-child(2) { left: 80px; animation-delay: 0.2s; }
+        .oar:nth-child(3) { right: 80px; animation-delay: 0.4s; }
+        .oar:nth-child(4) { right: 20px; animation-delay: 0.6s; }
+        
+        @keyframes row {
+            0%, 100% { transform: rotate(-20deg); }
+            50% { transform: rotate(20deg); }
+        }
+        
+        .rgb-components {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 60px;
+        }
+        
+        .component {
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            border: 3px solid #000;
+            animation: rgbGlow 1.5s ease-in-out infinite;
+        }
+        
+        .component:nth-child(1) {
+            left: 0;
+            background: #ff0000;
+            box-shadow: 0 0 20px #ff0000;
+            animation-delay: 0s;
+        }
+        
+        .component:nth-child(2) {
+            left: 50px;
+            background: #00ff00;
+            box-shadow: 0 0 20px #00ff00;
+            animation-delay: 0.3s;
+        }
+        
+        .component:nth-child(3) {
+            left: 100px;
+            background: #0000ff;
+            box-shadow: 0 0 20px #0000ff;
+            animation-delay: 0.6s;
+        }
+        
+        .component:nth-child(4) {
+            left: 150px;
+            background: #ff00ff;
+            box-shadow: 0 0 20px #ff00ff;
+            animation-delay: 0.9s;
+        }
+        
+        @keyframes rgbGlow {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-5px) scale(1.1); }
+        }
+        
+        .mast {
+            position: absolute;
+            width: 8px;
+            height: 100px;
+            background: linear-gradient(180deg, #8b4513 0%, #654321 100%);
+            border: 2px solid #000;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 60px;
+        }
+        
+        .sail {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            border: 3px solid #000;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 80px;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            animation: sailWave 2s ease-in-out infinite;
+        }
+        
+        @keyframes sailWave {
+            0%, 100% { transform: translateX(-50%) scaleX(1); }
+            50% { transform: translateX(-50%) scaleX(0.9); }
+        }
+        
+        .viking-symbol {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
+        }
+        
+        .title {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 5;
+        }
+        
+        .title h1 {
+            font-size: 32px;
+            color: #00ff00;
+            text-shadow: 
+                3px 3px 0 #000,
+                0 0 20px #00ff00,
+                0 0 40px #00ff00;
+            margin-bottom: 10px;
+            animation: titleGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 3px 3px 0 #000, 0 0 20px #00ff00, 0 0 40px #00ff00; }
+            50% { text-shadow: 3px 3px 0 #000, 0 0 30px #00ffff, 0 0 60px #00ffff; }
+        }
+        
+        .subtitle {
+            font-size: 12px;
+            color: #ffff00;
+            text-shadow: 2px 2px 0 #000, 0 0 10px #ffff00;
+        }
+        
+        .info-box {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 4px solid #00ffff;
+            padding: 15px 30px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+            z-index: 5;
+        }
+        
+        .info-box p {
+            font-size: 11px;
+            color: #ffffff;
+            margin: 5px 0;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        
+        .info-box .highlight {
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+        
+        .pixels {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 10px 10px;
+        }
+        
+        .achievement {
+            position: absolute;
+            top: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #ffd700;
+            padding: 10px 20px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+        
+        .achievement p {
+            font-size: 10px;
+            color: #ffd700;
+            text-shadow: 0 0 10px #ffd700;
+        }
+        
+        .runes {
+            position: absolute;
+            top: 200px;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+            letter-spacing: 20px;
+            opacity: 0.6;
+        }
+        
+        .life-cycle {
+            position: absolute;
+            top: 120px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #ff00ff;
+            padding: 8px 15px;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+            animation: cyclePulse 3s ease-in-out infinite;
+        }
+        
+        .life-cycle p {
+            font-size: 8px;
+            color: #ff00ff;
+            text-shadow: 0 0 8px #ff00ff;
+            margin: 3px 0;
+            text-align: left;
+        }
+        
+        .life-cycle .arrow {
+            color: #00ff00;
+            font-size: 10px;
+        }
+        
+        @keyframes cyclePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .hotel-badge {
+            position: absolute;
+            top: 120px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #ffd700;
+            padding: 8px 15px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            text-align: center;
+        }
+        
+        .hotel-badge p {
+            font-size: 7px;
+            color: #ffd700;
+            text-shadow: 0 0 8px #ffd700;
+            margin: 3px 0;
+        }
+        
+        .hotel-badge .big {
+            font-size: 9px;
+            color: #ffffff;
+            margin: 5px 0;
+        }
+        
+        .power-ups {
+            position: absolute;
+            bottom: 180px;
+            left: 30px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .power-up {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+        
+        .power-up:nth-child(1) {
+            background: #ff6b6b;
+            box-shadow: 0 0 15px #ff6b6b;
+            animation-delay: 0s;
+        }
+        
+        .power-up:nth-child(2) {
+            background: #4ecdc4;
+            box-shadow: 0 0 15px #4ecdc4;
+            animation-delay: 0.2s;
+        }
+        
+        .power-up:nth-child(3) {
+            background: #ffe66d;
+            box-shadow: 0 0 15px #ffe66d;
+            animation-delay: 0.4s;
+        }
+        
+        .power-up:nth-child(4) {
+            background: #95e1d3;
+            box-shadow: 0 0 15px #95e1d3;
+            animation-delay: 0.6s;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="gift-card">
+        <div class="pixels"></div>
+        <div class="scanlines"></div>
+        <div class="stars"></div>
+        
+        <div class="title">
+            <h1>THE GATHERING</h1>
+            <div class="subtitle">▸ VIKINGSKIPET 2025 ◂</div>
+        </div>
+        
+        <div class="runes">ᚱ ᚷ ᛒ</div>
+        
+        <div class="life-cycle">
+            <p>🍕 EAT <span class="arrow">▼</span></p>
+            <p>😴 SLEEP <span class="arrow">▼</span></p>
+            <p>🎮 GAME <span class="arrow">▼</span></p>
+            <p>🔁 REPEAT <span class="arrow">▲</span></p>
+        </div>
+        
+        <div class="hotel-badge">
+            <p>⭐ RESPAWN POINT ⭐</p>
+            <p class="big">SCANDIC</p>
+            <p class="big">HAMAR</p>
+            <p>━━━━━━━━━</p>
+            <p>HP RESTORED</p>
+        </div>
+        
+        <div class="power-ups">
+            <div class="power-up">🍕</div>
+            <div class="power-up">😴</div>
+            <div class="power-up">🎮</div>
+            <div class="power-up">🔁</div>
+        </div>
+        
+        <div class="achievement">
+            <p>⚔ LEGENDARY LOOT UNLOCKED ⚔</p>
+        </div>
+        
+        <div class="viking-ship">
+            <div class="rgb-components">
+                <div class="component"></div>
+                <div class="component"></div>
+                <div class="component"></div>
+                <div class="component"></div>
+            </div>
+            <div class="mast"></div>
+            <div class="sail">
+                <div class="viking-symbol">⚡</div>
+            </div>
+            <div class="ship-body">
+                <div class="ship-detail"></div>
+            </div>
+            <div class="oars">
+                <div class="oar"></div>
+                <div class="oar"></div>
+                <div class="oar"></div>
+                <div class="oar"></div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <p>━━━━━━━━━━━━━━━━━━━━</p>
+            <p>🎮 <span class="highlight">MERCH PACKAGE INCLUDED</span> 🎮</p>
+            <p>⚔ READY FOR BATTLE ⚔</p>
+            <p>━━━━━━━━━━━━━━━━━━━━</p>
+            <p style="font-size: 9px; margin-top: 10px;">FROM: MAMMA OG PAPPA</p>
+        </div>
+    </div>
+</body>
+</html>
