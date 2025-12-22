@@ -132,9 +132,9 @@
         const ship = {
             x: canvas.width / 2,
             y: canvas.height - 100,
-            width: 30,
-            height: 50,
-            speed: 5,
+            width: 40,
+            height: 60,
+            speed: 3,
             moveLeft: false,
             moveRight: false
         };
@@ -185,14 +185,23 @@
         let touchStartX = 0;
         canvas.addEventListener('touchstart', (e) => {
             touchStartX = e.touches[0].clientX;
+            ship.moveLeft = false;
+            ship.moveRight = false;
         });
 
         canvas.addEventListener('touchmove', (e) => {
             if (!gameActive) return;
+            e.preventDefault();
             const touchX = e.touches[0].clientX;
-            if (touchX < touchStartX - 10) ship.moveLeft = true;
-            else if (touchX > touchStartX + 10) ship.moveRight = true;
-            else {
+            const touchDiff = touchX - touchStartX;
+
+            if (touchDiff < -30) {
+                ship.moveLeft = true;
+                ship.moveRight = false;
+            } else if (touchDiff > 30) {
+                ship.moveRight = true;
+                ship.moveLeft = false;
+            } else {
                 ship.moveLeft = false;
                 ship.moveRight = false;
             }
@@ -231,19 +240,54 @@
         }
 
         function drawShip() {
-            ctx.fillStyle = '#8b4513';
-            ctx.fillRect(ship.x - ship.width / 2, ship.y, ship.width, ship.height);
-
-            ctx.strokeStyle = '#ff6b00';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(ship.x - ship.width / 2, ship.y, ship.width, ship.height);
-
-            ctx.fillStyle = '#ffff00';
+            // Viking ship hull
+            ctx.fillStyle = '#654321';
             ctx.beginPath();
-            ctx.moveTo(ship.x - ship.width / 4, ship.y);
-            ctx.lineTo(ship.x + ship.width / 4, ship.y);
-            ctx.lineTo(ship.x, ship.y - 15);
+            ctx.moveTo(ship.x, ship.y - 10);
+            ctx.lineTo(ship.x - ship.width / 2, ship.y + ship.height - 10);
+            ctx.lineTo(ship.x - ship.width / 2 + 5, ship.y + ship.height);
+            ctx.lineTo(ship.x + ship.width / 2 - 5, ship.y + ship.height);
+            ctx.lineTo(ship.x + ship.width / 2, ship.y + ship.height - 10);
+            ctx.closePath();
             ctx.fill();
+            ctx.strokeStyle = '#8b4513';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Sail
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.moveTo(ship.x - 2, ship.y + 10);
+            ctx.lineTo(ship.x - 2, ship.y - 20);
+            ctx.lineTo(ship.x + 15, ship.y - 5);
+            ctx.lineTo(ship.x + 15, ship.y + 25);
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = '#cccccc';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Mast
+            ctx.fillStyle = '#8b4513';
+            ctx.fillRect(ship.x - 2, ship.y - 20, 3, 50);
+
+            // Shield on side
+            ctx.fillStyle = '#ff0000';
+            ctx.beginPath();
+            ctx.arc(ship.x - ship.width / 2 + 5, ship.y + 20, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ffff00';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Dragon head at front
+            ctx.fillStyle = '#8b0000';
+            ctx.beginPath();
+            ctx.arc(ship.x, ship.y - 8, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Dragon neck
+            ctx.fillRect(ship.x - 2, ship.y - 10, 4, 5);
         }
 
         function createObstacles() {
