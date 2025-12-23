@@ -47,16 +47,32 @@
             left: 20px;
             right: 20px;
             z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        #score {
-            font-size: clamp(12px, 4vw, 20px);
+        #score, #highScore, #powerupIndicator {
+            font-size: clamp(10px, 3vw, 16px);
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00;
-            padding: 10px;
+            padding: 8px;
             background: rgba(0, 0, 0, 0.8);
             border: 2px solid #00ff00;
             display: inline-block;
+        }
+
+        #highScore {
+            color: #ffff00;
+            text-shadow: 0 0 10px #ffff00;
+            border-color: #ffff00;
+        }
+
+        #powerupIndicator {
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+            border-color: #ff00ff;
         }
 
         #gameOver {
@@ -105,6 +121,80 @@
             background: #00ffff;
             text-shadow: 0 0 10px #00ffff;
         }
+
+        .newRecord {
+            color: #ff00ff;
+            text-shadow: 0 0 20px #ff00ff;
+            font-size: clamp(12px, 5vw, 20px);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        #instructions {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            z-index: 100;
+            max-width: 90%;
+            width: 500px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.8);
+        }
+
+        #instructions h3 {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            font-size: clamp(10px, 3vw, 14px);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        #instructions .guide {
+            font-size: clamp(8px, 2vw, 10px);
+            line-height: 1.6;
+            color: #ffffff;
+        }
+
+        #instructions .danger {
+            color: #ff0000;
+            text-shadow: 0 0 8px #ff0000;
+        }
+
+        #instructions .powerup {
+            color: #00ffff;
+            text-shadow: 0 0 8px #00ffff;
+        }
+
+        #instructions button {
+            background: #00ff00;
+            color: #000;
+            border: 3px solid #000;
+            padding: 12px 25px;
+            font-size: clamp(10px, 3vw, 14px);
+            font-family: 'Press Start 2P', cursive;
+            cursor: pointer;
+            margin-top: 15px;
+            border-radius: 5px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+            transition: all 0.3s;
+        }
+
+        #instructions button:hover {
+            background: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -112,10 +202,29 @@
         <canvas id="gameCanvas"></canvas>
         <div id="gameUI">
             <div id="score">Distance: 0m</div>
+            <div id="highScore">High: 0m</div>
+            <div id="powerupIndicator" style="display:none;">SHIELD: 3s</div>
+
+            <div id="instructions">
+                <h3>HVORDAN SPILLE</h3>
+                <div class="guide">
+                    <div class="danger">⚠️ UNNGÅ (FARER):</div>
+                    🎄 Juletrær • 🦌 Svømmende reinsdyr • 🎅🏄 Surfende nisser<br><br>
+
+                    <div class="powerup">✨ SAMLE (POWER-UPS):</div>
+                    🛡️ Skjold (3 sek beskyttelse) • ⭐ Stjerne (+100p) • 💰 Mynt (+50p)<br><br>
+
+                    📱 Mobil: Trykk venstre/høyre side<br>
+                    ⌨️ PC: Piltaster ← →
+                </div>
+                <button onclick="document.getElementById('instructions').style.display='none'">START!</button>
+            </div>
+
             <div id="gameOver" style="display:none;">
                 <h1>GAME OVER</h1>
                 <p id="finalScore">Distance: 0m</p>
                 <p id="message"></p>
+                <p id="newRecord" class="newRecord" style="display:none;">🏆 NEW RECORD! 🏆</p>
                 <button onclick="location.reload()">Play Again</button>
                 <a href="index.html">Back to Main</a>
             </div>
@@ -129,6 +238,10 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
+        // High score system
+        let highScore = parseInt(localStorage.getItem('vikingRaceHighScore')) || 0;
+        document.getElementById('highScore').textContent = `High: ${highScore}m`;
+
         const ship = {
             x: canvas.width / 2,
             y: canvas.height - 100,
@@ -136,19 +249,59 @@
             height: 60,
             speed: 1.5,
             moveLeft: false,
-            moveRight: false
+            moveRight: false,
+            hasShield: false,
+            shieldTime: 0
         };
 
         let gameActive = true;
         let distance = 0;
+        let score = 0;
         let obstacles = [];
+        let powerups = [];
+        let particles = [];
+        let snowflakes = [];
         let scrollOffset = 0;
         let riverCurveOffset = 0;
+        let riverCurveSpeed = 0.003; // Slower base speed
+        let riverCurveAmplitude = 60; // Reduced amplitude
+        let riverCurveVariation = 0; // For variable curves
         const RIVER_WIDTH = Math.min(canvas.width * 0.6, 400);
         const BASE_RIVER_LEFT = (canvas.width - RIVER_WIDTH) / 2;
         const BASE_RIVER_RIGHT = BASE_RIVER_LEFT + RIVER_WIDTH;
         let RIVER_LEFT = BASE_RIVER_LEFT;
         let RIVER_RIGHT = BASE_RIVER_RIGHT;
+
+        // Create snowflakes
+        function createSnowflakes() {
+            for (let i = 0; i < 50; i++) {
+                snowflakes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 1,
+                    speed: Math.random() * 1 + 0.5,
+                    drift: Math.random() * 0.5 - 0.25
+                });
+            }
+        }
+        createSnowflakes();
+
+        function drawSnowflakes() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            snowflakes.forEach(flake => {
+                ctx.beginPath();
+                ctx.arc(flake.x, flake.y, flake.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                flake.y += flake.speed;
+                flake.x += flake.drift;
+
+                if (flake.y > canvas.height) {
+                    flake.y = -10;
+                    flake.x = Math.random() * canvas.width;
+                }
+            });
+        }
 
         let santas = [];
         function createSantas() {
@@ -212,7 +365,14 @@
         });
 
         function drawRiver() {
-            riverCurveOffset = Math.sin(scrollOffset * 0.01) * 50;
+            // Variable river curves - changes over time
+            riverCurveVariation = Math.sin(scrollOffset * 0.0005) * 20;
+            const currentAmplitude = riverCurveAmplitude + riverCurveVariation;
+            const currentSpeed = riverCurveSpeed + Math.sin(scrollOffset * 0.0003) * 0.001;
+
+            // More dynamic but slower river curves
+            riverCurveOffset = Math.sin(scrollOffset * currentSpeed) * currentAmplitude +
+                               Math.sin(scrollOffset * currentSpeed * 1.7) * 20;
             RIVER_LEFT = BASE_RIVER_LEFT + riverCurveOffset;
             RIVER_RIGHT = BASE_RIVER_RIGHT + riverCurveOffset;
 
@@ -221,13 +381,15 @@
             ctx.moveTo(RIVER_LEFT, 0);
 
             for (let y = 0; y <= canvas.height; y += 20) {
-                const curve = Math.sin((scrollOffset + y) * 0.01) * 50;
+                const curve = Math.sin((scrollOffset + y) * currentSpeed) * currentAmplitude +
+                             Math.sin((scrollOffset + y) * currentSpeed * 1.7) * 20;
                 const x = BASE_RIVER_LEFT + curve;
                 ctx.lineTo(x, y);
             }
 
             for (let y = canvas.height; y >= 0; y -= 20) {
-                const curve = Math.sin((scrollOffset + y) * 0.01) * 50;
+                const curve = Math.sin((scrollOffset + y) * currentSpeed) * currentAmplitude +
+                             Math.sin((scrollOffset + y) * currentSpeed * 1.7) * 20;
                 const x = BASE_RIVER_RIGHT + curve;
                 ctx.lineTo(x, y);
             }
@@ -238,30 +400,45 @@
             ctx.fillStyle = '#1a4a6a';
             for (let i = 0; i < canvas.height; i += 40) {
                 const offset = (scrollOffset % 40);
-                const curve = Math.sin((scrollOffset + i + offset) * 0.01) * 50;
+                const curve = Math.sin((scrollOffset + i + offset) * currentSpeed) * currentAmplitude +
+                             Math.sin((scrollOffset + i + offset) * currentSpeed * 1.7) * 20;
                 ctx.fillRect(BASE_RIVER_LEFT + curve, i + offset, RIVER_WIDTH, 2);
             }
 
             ctx.strokeStyle = '#654321';
             ctx.lineWidth = 5;
             ctx.beginPath();
-            ctx.moveTo(BASE_RIVER_LEFT + Math.sin(scrollOffset * 0.01) * 50, 0);
+            ctx.moveTo(BASE_RIVER_LEFT + Math.sin(scrollOffset * currentSpeed) * currentAmplitude, 0);
             for (let y = 0; y <= canvas.height; y += 10) {
-                const curve = Math.sin((scrollOffset + y) * 0.01) * 50;
+                const curve = Math.sin((scrollOffset + y) * currentSpeed) * currentAmplitude +
+                             Math.sin((scrollOffset + y) * currentSpeed * 1.7) * 20;
                 ctx.lineTo(BASE_RIVER_LEFT + curve, y);
             }
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.moveTo(BASE_RIVER_RIGHT + Math.sin(scrollOffset * 0.01) * 50, 0);
+            ctx.moveTo(BASE_RIVER_RIGHT + Math.sin(scrollOffset * currentSpeed) * currentAmplitude, 0);
             for (let y = 0; y <= canvas.height; y += 10) {
-                const curve = Math.sin((scrollOffset + y) * 0.01) * 50;
+                const curve = Math.sin((scrollOffset + y) * currentSpeed) * currentAmplitude +
+                             Math.sin((scrollOffset + y) * currentSpeed * 1.7) * 20;
                 ctx.lineTo(BASE_RIVER_RIGHT + curve, y);
             }
             ctx.stroke();
         }
 
         function drawShip() {
+            // Shield effect
+            if (ship.hasShield) {
+                ctx.strokeStyle = '#00ffff';
+                ctx.lineWidth = 3;
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#00ffff';
+                ctx.beginPath();
+                ctx.arc(ship.x, ship.y + 25, 40, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            }
+
             // Viking ship hull
             ctx.fillStyle = '#654321';
             ctx.beginPath();
@@ -312,9 +489,147 @@
             ctx.fillRect(ship.x - 2, ship.y - 10, 4, 5);
         }
 
+        function createPowerups() {
+            if (Math.random() < 0.01) {
+                const types = ['shield', 'star', 'coin'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                const x = RIVER_LEFT + Math.random() * RIVER_WIDTH;
+                powerups.push({
+                    x: x,
+                    y: -30,
+                    width: 25,
+                    height: 25,
+                    type: type,
+                    rotation: 0
+                });
+            }
+        }
+
+        function drawPowerups() {
+            powerups.forEach((p) => {
+                p.rotation += 0.1;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation);
+
+                if (p.type === 'shield') {
+                    // Shield power-up
+                    ctx.strokeStyle = '#00ffff';
+                    ctx.lineWidth = 3;
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#00ffff';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 12, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.shadowBlur = 0;
+                } else if (p.type === 'star') {
+                    // Star power-up
+                    ctx.fillStyle = '#ffff00';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#ffff00';
+                    ctx.beginPath();
+                    for (let i = 0; i < 5; i++) {
+                        const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+                        const x = Math.cos(angle) * 12;
+                        const y = Math.sin(angle) * 12;
+                        if (i === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                } else if (p.type === 'coin') {
+                    // Coin power-up
+                    ctx.fillStyle = '#ffd700';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#ffd700';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 10, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#ff8800';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('$', 0, 0);
+                    ctx.shadowBlur = 0;
+                }
+
+                ctx.restore();
+            });
+        }
+
+        function updatePowerups() {
+            powerups = powerups.filter(p => {
+                p.y += 3;
+                return p.y < canvas.height;
+            });
+        }
+
+        function checkPowerupCollisions() {
+            powerups.forEach((p, index) => {
+                const shipLeft = ship.x - ship.width / 2;
+                const shipRight = ship.x + ship.width / 2;
+                const shipTop = ship.y;
+                const shipBottom = ship.y + ship.height;
+
+                const pLeft = p.x - p.width / 2;
+                const pRight = p.x + p.width / 2;
+                const pTop = p.y - p.height / 2;
+                const pBottom = p.y + p.height / 2;
+
+                if (shipRight > pLeft && shipLeft < pRight &&
+                    shipBottom > pTop && shipTop < pBottom) {
+
+                    // Create particle effect
+                    for (let i = 0; i < 20; i++) {
+                        particles.push({
+                            x: p.x,
+                            y: p.y,
+                            vx: (Math.random() - 0.5) * 5,
+                            vy: (Math.random() - 0.5) * 5,
+                            life: 30,
+                            color: p.type === 'shield' ? '#00ffff' : p.type === 'star' ? '#ffff00' : '#ffd700'
+                        });
+                    }
+
+                    if (p.type === 'shield') {
+                        ship.hasShield = true;
+                        ship.shieldTime = 180; // 3 seconds at 60fps
+                    } else if (p.type === 'star') {
+                        score += 100;
+                    } else if (p.type === 'coin') {
+                        score += 50;
+                    }
+
+                    powerups.splice(index, 1);
+                }
+            });
+        }
+
+        function drawParticles() {
+            particles.forEach((p, index) => {
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.life / 30;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life--;
+
+                if (p.life <= 0) {
+                    particles.splice(index, 1);
+                }
+            });
+        }
+
         function createObstacles() {
-            if (Math.random() < 0.02) {
-                const type = Math.random() < 0.5 ? 'reindeer' : 'tree';
+            const spawnRate = Math.min(0.02 + distance / 100000, 0.05);
+            if (Math.random() < spawnRate) {
+                const types = ['reindeer', 'tree', 'surfingSanta'];
+                const type = types[Math.floor(Math.random() * types.length)];
                 const x = RIVER_LEFT + Math.random() * RIVER_WIDTH;
                 obstacles.push({
                     x: x,
@@ -329,7 +644,31 @@
 
         function drawObstacles() {
             obstacles.forEach((obs) => {
-                if (obs.type === 'reindeer') {
+                if (obs.type === 'surfingSanta') {
+                    // Surfing Santa
+                    const surfBob = Math.sin(scrollOffset * 0.15 + obs.swimOffset) * 5;
+                    const yPos = obs.y + surfBob;
+
+                    // Surfboard
+                    ctx.fillStyle = '#00ffff';
+                    ctx.save();
+                    ctx.translate(obs.x, yPos + 15);
+                    ctx.rotate(Math.sin(scrollOffset * 0.1 + obs.swimOffset) * 0.2);
+                    ctx.fillRect(-20, -5, 40, 10);
+                    ctx.restore();
+
+                    // Santa on board
+                    ctx.font = '28px Arial';
+                    ctx.fillText('🎅', obs.x - 14, yPos);
+
+                    // Surf spray
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                    ctx.beginPath();
+                    ctx.arc(obs.x - 20, yPos + 15, 5, 0, Math.PI * 2);
+                    ctx.arc(obs.x + 20, yPos + 15, 5, 0, Math.PI * 2);
+                    ctx.fill();
+
+                } else if (obs.type === 'reindeer') {
                     const swimBob = Math.sin(scrollOffset * 0.1 + obs.swimOffset) * 3;
                     const yPos = obs.y + swimBob;
 
@@ -428,6 +767,8 @@
         }
 
         function checkCollisions() {
+            if (ship.hasShield) return; // Shield protects from collisions
+
             obstacles.forEach((obs) => {
                 const shipLeft = ship.x - ship.width / 2;
                 const shipRight = ship.x + ship.width / 2;
@@ -441,8 +782,11 @@
 
                 if (shipRight > obsLeft && shipLeft < obsRight &&
                     shipBottom > obsTop && shipTop < obsBottom) {
-                    const message = obs.type === 'tree' ? 'CHRISTMAS TREE' : 'SWIMMING REINDEER';
-                    endGame(`CRASHED INTO ${message}!`);
+                    let message = 'CRASHED!';
+                    if (obs.type === 'tree') message = 'CHRISTMAS TREE CRASH!';
+                    else if (obs.type === 'reindeer') message = 'REINDEER COLLISION!';
+                    else if (obs.type === 'surfingSanta') message = 'WIPED OUT BY SANTA!';
+                    endGame(message);
                 }
             });
 
@@ -456,9 +800,19 @@
 
         function endGame(message) {
             gameActive = false;
+            const finalDistance = Math.floor(distance);
+            const finalScore = finalDistance + score;
+
             document.getElementById('gameOver').style.display = 'block';
-            document.getElementById('finalScore').textContent = `Distance: ${Math.floor(distance)}m`;
+            document.getElementById('finalScore').textContent = `Distance: ${finalDistance}m | Score: ${finalScore}`;
             document.getElementById('message').textContent = message;
+
+            // Check for new high score
+            if (finalScore > highScore) {
+                highScore = finalScore;
+                localStorage.setItem('vikingRaceHighScore', highScore);
+                document.getElementById('newRecord').style.display = 'block';
+            }
         }
 
         function updateGame() {
@@ -471,9 +825,22 @@
                 ship.x += ship.speed;
             }
 
+            // Update shield
+            if (ship.hasShield) {
+                ship.shieldTime--;
+                if (ship.shieldTime <= 0) {
+                    ship.hasShield = false;
+                }
+                document.getElementById('powerupIndicator').style.display = 'block';
+                document.getElementById('powerupIndicator').textContent = `SHIELD: ${Math.ceil(ship.shieldTime / 60)}s`;
+            } else {
+                document.getElementById('powerupIndicator').style.display = 'none';
+            }
+
             distance += 0.5;
             scrollOffset += 3;
-            document.getElementById('score').textContent = `Distance: ${Math.floor(distance)}m`;
+            const displayScore = Math.floor(distance) + score;
+            document.getElementById('score').textContent = `Distance: ${Math.floor(distance)}m | Score: ${displayScore}`;
 
             if (distance > 5000) {
                 endGame('REACHED VIKINGSKIPET! 🏆');
@@ -484,12 +851,18 @@
             ctx.fillStyle = '#0a0a0a';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            drawSnowflakes();
             drawRiver();
             drawSantas();
+            createPowerups();
+            updatePowerups();
+            drawPowerups();
+            checkPowerupCollisions();
             createObstacles();
             updateObstacles();
             drawObstacles();
             checkCollisions();
+            drawParticles();
             drawShip();
             updateGame();
 
