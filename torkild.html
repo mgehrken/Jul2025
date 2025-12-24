@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Torkild's Backflip Challenge - The Gathering</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Press Start 2P', cursive;
+            overflow: hidden;
+            touch-action: pan-x pan-y;
+            -ms-touch-action: pan-x pan-y;
+        }
+
+        /* Prevent zoom on double-tap */
+        * {
+            touch-action: manipulation;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        /* CRT Screen Effect */
+        #gameContainer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.15),
+                    rgba(0, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            pointer-events: none;
+            z-index: 1000;
+            animation: scanline 8s linear infinite;
+        }
+
+        /* CRT curvature effect */
+        #gameContainer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+
+        /* Retro screen flicker */
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.97; }
+        }
+
+        canvas {
+            animation: flicker 0.15s infinite;
+        }
+
+        #gameUI {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        #score, #highScore, #rotationMeter {
+            font-size: clamp(10px, 3vw, 16px);
+            color: #00ff00;
+            text-shadow:
+                0 0 5px #00ff00,
+                0 0 10px #00ff00,
+                0 0 15px #00ff00,
+                0 0 20px #00ff00;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #00ff00;
+            box-shadow:
+                0 0 10px #00ff00,
+                inset 0 0 10px rgba(0, 255, 0, 0.2);
+            display: inline-block;
+            letter-spacing: 2px;
+        }
+
+        #highScore {
+            color: #ffff00;
+            text-shadow:
+                0 0 5px #ffff00,
+                0 0 10px #ffff00,
+                0 0 15px #ffff00,
+                0 0 20px #ffff00;
+            border-color: #ffff00;
+            box-shadow:
+                0 0 10px #ffff00,
+                inset 0 0 10px rgba(255, 255, 0, 0.2);
+        }
+
+        #rotationMeter {
+            color: #ff00ff;
+            text-shadow:
+                0 0 5px #ff00ff,
+                0 0 10px #ff00ff,
+                0 0 15px #ff00ff,
+                0 0 20px #ff00ff;
+            border-color: #ff00ff;
+            box-shadow:
+                0 0 10px #ff00ff,
+                inset 0 0 10px rgba(255, 0, 255, 0.2);
+        }
+
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ff00ff;
+            padding: 30px;
+            text-align: center;
+            z-index: 100;
+            box-shadow:
+                0 0 20px rgba(255, 0, 255, 0.8),
+                0 0 40px rgba(255, 0, 255, 0.6),
+                inset 0 0 20px rgba(255, 0, 255, 0.2);
+            border-radius: 0;
+            image-rendering: pixelated;
+        }
+
+        #gameOver h1 {
+            font-size: clamp(20px, 8vw, 40px);
+            color: #ff0000;
+            text-shadow:
+                0 0 10px #ff0000,
+                0 0 20px #ff0000,
+                0 0 30px #ff0000,
+                2px 2px 0 #000;
+            margin-bottom: 20px;
+            animation: glitchText 0.5s infinite;
+        }
+
+        @keyframes glitchText {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-2px, 2px); }
+            94% { transform: translate(2px, -2px); }
+        }
+
+        #gameOver p {
+            font-size: clamp(10px, 4vw, 16px);
+            color: #ffff00;
+            text-shadow:
+                0 0 5px #ffff00,
+                0 0 10px #ffff00,
+                0 0 15px #ffff00;
+            margin: 10px 0;
+        }
+
+        #gameOver button, #gameOver a {
+            background: #00ff00;
+            color: #000;
+            border: 3px solid #00ff00;
+            padding: clamp(8px, 3vw, 15px);
+            font-size: clamp(10px, 3vw, 14px);
+            font-family: 'Press Start 2P', cursive;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 0;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow:
+                0 0 10px #00ff00,
+                inset 0 0 10px rgba(0, 255, 0, 0.3);
+            transition: all 0.1s;
+        }
+
+        #gameOver button:hover, #gameOver a:hover {
+            background: #00ffff;
+            border-color: #00ffff;
+            box-shadow:
+                0 0 15px #00ffff,
+                0 0 30px #00ffff,
+                inset 0 0 15px rgba(0, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        .newRecord {
+            color: #ff00ff;
+            text-shadow:
+                0 0 10px #ff00ff,
+                0 0 20px #ff00ff;
+            font-size: clamp(12px, 5vw, 20px);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        #instructions {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #00ff00;
+            border-radius: 0;
+            padding: 20px;
+            z-index: 100;
+            max-width: 90%;
+            width: 500px;
+            box-shadow:
+                0 0 20px rgba(0, 255, 0, 0.8),
+                0 0 40px rgba(0, 255, 0, 0.6),
+                inset 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+
+        #instructions h3 {
+            color: #00ff00;
+            text-shadow:
+                0 0 5px #00ff00,
+                0 0 10px #00ff00,
+                0 0 15px #00ff00;
+            font-size: clamp(10px, 3vw, 14px);
+            margin-bottom: 10px;
+            text-align: center;
+            letter-spacing: 3px;
+        }
+
+        #instructions .guide {
+            font-size: clamp(8px, 2vw, 10px);
+            line-height: 1.6;
+            color: #ffffff;
+        }
+
+        #instructions .highlight {
+            color: #00ffff;
+            text-shadow: 0 0 8px #00ffff;
+        }
+
+        #instructions button {
+            background: #00ff00;
+            color: #000;
+            border: 3px solid #00ff00;
+            padding: 12px 25px;
+            font-size: clamp(10px, 3vw, 14px);
+            font-family: 'Press Start 2P', cursive;
+            cursor: pointer;
+            margin-top: 15px;
+            border-radius: 0;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow:
+                0 0 15px #00ff00,
+                0 0 30px rgba(0, 255, 0, 0.6),
+                inset 0 0 10px rgba(0, 255, 0, 0.3);
+            transition: all 0.1s;
+            letter-spacing: 2px;
+        }
+
+        #instructions button:hover {
+            background: #00ffff;
+            border-color: #00ffff;
+            box-shadow:
+                0 0 20px #00ffff,
+                0 0 40px rgba(0, 255, 255, 0.8),
+                inset 0 0 15px rgba(0, 255, 255, 0.4);
+            transform: scale(1.08);
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        <div id="gameUI">
+            <div id="score">Torkilds: 0</div>
+            <div id="highScore">Best: 0</div>
+            <div id="rotationMeter">Rotation: 0°</div>
+
+            <div id="instructions">
+                <h3>HVORDAN SPILLE</h3>
+                <div class="guide">
+                    <div class="highlight">🎯 MÅL:</div>
+                    Gjør backflips og sprø hopp inn i sofaen!<br><br>
+
+                    <div class="highlight">🎮 KONTROLLER:</div>
+                    <strong>SPACE/TRYKK:</strong> Hopp<br>
+                    <strong>Hold inne:</strong> Roter i luften<br><br>
+
+                    <div class="highlight">⭐ POENG (TORKILDS):</div>
+                    🔄 Backflip (360°): 100 Torkilds<br>
+                    🔄🔄 Double (720°): 250 Torkilds<br>
+                    🔄🔄🔄 Triple (1080°): 500 Torkilds<br>
+                    🎪 Crazy flips (1440°+): 1000+ Torkilds!<br><br>
+
+                    <strong>Lykke til, Torkild!</strong>
+                </div>
+                <button onclick="document.getElementById('instructions').style.display='none'">START!</button>
+            </div>
+
+            <div id="gameOver" style="display:none;">
+                <h1>GAME OVER</h1>
+                <p id="finalScore">Torkilds: 0</p>
+                <p id="message"></p>
+                <p id="newRecord" class="newRecord" style="display:none;">🏆 NY REKORD! 🏆</p>
+                <button onclick="location.reload()">Spill Igjen</button>
+                <a href="index.html">Tilbake</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // High score system
+        let highScore = parseInt(localStorage.getItem('torkildHighScore')) || 0;
+        document.getElementById('highScore').textContent = `Best: ${highScore}`;
+
+        // Game physics
+        const GRAVITY = 0.6;
+        const JUMP_POWER = -15;
+        const ROTATION_SPEED = 12;
+
+        // Torkild character
+        const torkild = {
+            x: canvas.width * 0.3,
+            y: canvas.height * 0.5,
+            width: 30,
+            height: 40,
+            vx: 0,
+            vy: 0,
+            rotation: 0,
+            isJumping: false,
+            isRotating: false,
+            totalRotation: 0,
+            attemptStartRotation: 0
+        };
+
+        // Sofa
+        const sofa = {
+            x: canvas.width * 0.65,
+            y: canvas.height * 0.7,
+            width: 200,
+            height: 80,
+            seatY: canvas.height * 0.7 - 20
+        };
+
+        // Floor
+        const FLOOR_Y = canvas.height * 0.8;
+
+        // Game state
+        let score = 0;
+        let gameActive = true;
+        let particles = [];
+        let fireParticles = [];
+
+        // Input handling
+        let spacePressed = false;
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === ' ') {
+                e.preventDefault();
+                if (!torkild.isJumping && gameActive) {
+                    jump();
+                }
+                spacePressed = true;
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === ' ') {
+                spacePressed = false;
+            }
+        });
+
+        // Touch controls
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!torkild.isJumping && gameActive) {
+                jump();
+            }
+            spacePressed = true;
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            spacePressed = false;
+        });
+
+        function jump() {
+            torkild.vy = JUMP_POWER;
+            torkild.isJumping = true;
+            torkild.totalRotation = 0;
+            torkild.attemptStartRotation = torkild.rotation;
+        }
+
+        // Create fireplace particles
+        function createFireParticles() {
+            if (Math.random() < 0.3) {
+                fireParticles.push({
+                    x: sofa.x + sofa.width / 2 + (Math.random() - 0.5) * 100,
+                    y: canvas.height * 0.3,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: -Math.random() * 3 - 1,
+                    life: 60,
+                    size: Math.random() * 4 + 2,
+                    color: Math.random() > 0.5 ? '#ff6600' : '#ffaa00'
+                });
+            }
+        }
+
+        function drawFireplace() {
+            const fpX = sofa.x + sofa.width / 2 - 80;
+            const fpY = canvas.height * 0.2;
+            const fpWidth = 160;
+            const fpHeight = 200;
+
+            // Fireplace stone
+            ctx.fillStyle = '#555555';
+            ctx.fillRect(fpX, fpY, fpWidth, fpHeight);
+
+            // Inner fire area
+            ctx.fillStyle = '#222222';
+            ctx.fillRect(fpX + 20, fpY + 20, fpWidth - 40, fpHeight - 60);
+
+            // Fire glow
+            const fireGradient = ctx.createRadialGradient(
+                fpX + fpWidth / 2, fpY + fpHeight - 50, 10,
+                fpX + fpWidth / 2, fpY + fpHeight - 50, 60
+            );
+            fireGradient.addColorStop(0, 'rgba(255, 150, 0, 0.8)');
+            fireGradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
+            ctx.fillStyle = fireGradient;
+            ctx.fillRect(fpX + 20, fpY + 20, fpWidth - 40, fpHeight - 60);
+
+            // Mantle
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(fpX - 10, fpY + fpHeight - 40, fpWidth + 20, 20);
+        }
+
+        function drawFire() {
+            fireParticles.forEach((p, index) => {
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.life / 60;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life--;
+                p.size *= 0.98;
+
+                if (p.life <= 0) {
+                    fireParticles.splice(index, 1);
+                }
+            });
+        }
+
+        function drawFloor() {
+            // Wooden floor planks
+            ctx.fillStyle = '#8B6F47';
+            ctx.fillRect(0, FLOOR_Y, canvas.width, canvas.height - FLOOR_Y);
+
+            // Wood grain lines
+            ctx.strokeStyle = '#6B5537';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < canvas.width; i += 100) {
+                ctx.beginPath();
+                ctx.moveTo(i, FLOOR_Y);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+
+            // Horizontal planks
+            for (let i = FLOOR_Y; i < canvas.height; i += 20) {
+                ctx.strokeStyle = 'rgba(107, 85, 55, 0.5)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+        }
+
+        function drawSofa() {
+            // Gray blanket on side
+            ctx.fillStyle = '#888888';
+            ctx.beginPath();
+            ctx.moveTo(sofa.x - 20, sofa.y);
+            ctx.lineTo(sofa.x - 5, sofa.y + 40);
+            ctx.lineTo(sofa.x + 15, sofa.y + 50);
+            ctx.lineTo(sofa.x + 5, sofa.y + 10);
+            ctx.closePath();
+            ctx.fill();
+
+            // Sofa base - white
+            ctx.fillStyle = '#f5f5f5';
+            ctx.fillRect(sofa.x, sofa.y, sofa.width, sofa.height);
+
+            // Sofa back
+            ctx.fillStyle = '#e8e8e8';
+            ctx.fillRect(sofa.x, sofa.y - 40, sofa.width, 40);
+
+            // Arms
+            ctx.fillStyle = '#dddddd';
+            ctx.fillRect(sofa.x - 15, sofa.y - 30, 15, 70);
+            ctx.fillRect(sofa.x + sofa.width, sofa.y - 30, 15, 70);
+
+            // Seat cushions outline
+            ctx.strokeStyle = '#cccccc';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(sofa.x + 10, sofa.y, sofa.width / 3 - 10, sofa.height - 20);
+            ctx.strokeRect(sofa.x + sofa.width / 3 + 5, sofa.y, sofa.width / 3 - 10, sofa.height - 20);
+            ctx.strokeRect(sofa.x + (sofa.width / 3) * 2, sofa.y, sofa.width / 3 - 10, sofa.height - 20);
+
+            // Decorative pillows
+            drawPillow(sofa.x + 30, sofa.y - 35, 35, 25, '#6B8E23', true); // Gray-green
+            drawPillow(sofa.x + 70, sofa.y - 35, 35, 25, '#228B22', false); // Green with stripes
+            drawPillow(sofa.x + 100, sofa.y - 35, 35, 25, '#6B8E23', true); // Gray-green
+            drawPillow(sofa.x + 135, sofa.y - 35, 35, 25, '#228B22', false); // Green with stripes
+        }
+
+        function drawPillow(x, y, w, h, color, isGrayGreen) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = '#555555';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x, y, w, h);
+
+            if (!isGrayGreen) {
+                // White stripes for green pillows
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(x + w / 3, y);
+                ctx.lineTo(x + w / 3, y + h);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x + (w / 3) * 2, y);
+                ctx.lineTo(x + (w / 3) * 2, y + h);
+                ctx.stroke();
+            }
+        }
+
+        function drawTorkild() {
+            ctx.save();
+            ctx.translate(torkild.x, torkild.y);
+            ctx.rotate(torkild.rotation);
+
+            // Body - white and red checkered shirt
+            const checkSize = 8;
+            for (let i = -15; i < 15; i += checkSize) {
+                for (let j = -10; j < 20; j += checkSize) {
+                    const isRed = ((Math.floor(i / checkSize) + Math.floor(j / checkSize)) % 2) === 0;
+                    ctx.fillStyle = isRed ? '#ff0000' : '#ffffff';
+                    ctx.fillRect(i, j, checkSize, checkSize);
+                }
+            }
+
+            // Head
+            ctx.fillStyle = '#ffdbac';
+            ctx.beginPath();
+            ctx.arc(0, -15, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Hair
+            ctx.fillStyle = '#4a3728';
+            ctx.beginPath();
+            ctx.arc(0, -18, 11, Math.PI, Math.PI * 2);
+            ctx.fill();
+
+            // Eyes
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(-3, -15, 2, 0, Math.PI * 2);
+            ctx.arc(3, -15, 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Smile
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(0, -12, 5, 0, Math.PI);
+            ctx.stroke();
+
+            // Arms
+            ctx.strokeStyle = '#ff0000';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(-12, 0);
+            ctx.lineTo(-18, 10);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(12, 0);
+            ctx.lineTo(18, 10);
+            ctx.stroke();
+
+            // Legs - blue jeans
+            ctx.strokeStyle = '#0066cc';
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(-5, 20);
+            ctx.lineTo(-8, 30);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(5, 20);
+            ctx.lineTo(8, 30);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        function createParticles(x, y, color, count) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    life: 60,
+                    color: color,
+                    size: Math.random() * 4 + 2
+                });
+            }
+        }
+
+        function drawParticles() {
+            particles.forEach((p, index) => {
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.life / 60;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.2;
+                p.life--;
+
+                if (p.life <= 0) {
+                    particles.splice(index, 1);
+                }
+            });
+        }
+
+        function updatePhysics() {
+            if (!gameActive) return;
+
+            // Apply gravity
+            torkild.vy += GRAVITY;
+            torkild.y += torkild.vy;
+            torkild.x += torkild.vx;
+
+            // Rotation control
+            if (spacePressed && torkild.isJumping) {
+                torkild.rotation += ROTATION_SPEED * (Math.PI / 180);
+                torkild.totalRotation += ROTATION_SPEED;
+            }
+
+            // Check landing on sofa
+            if (torkild.isJumping && torkild.vy > 0) {
+                if (torkild.x > sofa.x && torkild.x < sofa.x + sofa.width &&
+                    torkild.y > sofa.seatY - 30 && torkild.y < sofa.seatY + 10) {
+
+                    landOnSofa();
+                }
+                // Check floor collision (miss)
+                else if (torkild.y > FLOOR_Y - 20) {
+                    missedSofa();
+                }
+            }
+
+            // Update rotation meter
+            document.getElementById('rotationMeter').textContent = `Rotation: ${Math.floor(Math.abs(torkild.totalRotation))}°`;
+        }
+
+        function landOnSofa() {
+            torkild.isJumping = false;
+            torkild.vy = 0;
+            torkild.y = sofa.seatY - 10;
+
+            const degrees = Math.abs(torkild.totalRotation);
+            let points = 0;
+            let message = '';
+
+            if (degrees >= 1440) {
+                points = 1000 + Math.floor(degrees / 360) * 200;
+                message = `🎪 CRAZY ${Math.floor(degrees / 360)}-FLIP! +${points}`;
+                createParticles(torkild.x, torkild.y, '#ff00ff', 50);
+            } else if (degrees >= 1080) {
+                points = 500;
+                message = '🔄🔄🔄 TRIPLE BACKFLIP! +500';
+                createParticles(torkild.x, torkild.y, '#ffff00', 40);
+            } else if (degrees >= 720) {
+                points = 250;
+                message = '🔄🔄 DOUBLE BACKFLIP! +250';
+                createParticles(torkild.x, torkild.y, '#00ffff', 30);
+            } else if (degrees >= 360) {
+                points = 100;
+                message = '🔄 BACKFLIP! +100';
+                createParticles(torkild.x, torkild.y, '#00ff00', 20);
+            } else if (degrees >= 180) {
+                points = 50;
+                message = '↪️ Half flip! +50';
+                createParticles(torkild.x, torkild.y, '#ffffff', 10);
+            } else {
+                points = 10;
+                message = '✓ Landed! +10';
+                createParticles(torkild.x, torkild.y, '#888888', 5);
+            }
+
+            score += points;
+            document.getElementById('score').textContent = `Torkilds: ${score}`;
+
+            // Show message
+            showFloatingText(message, torkild.x, torkild.y - 40);
+
+            // Reset rotation
+            torkild.rotation = 0;
+            torkild.totalRotation = 0;
+
+            // Reset position for next jump
+            setTimeout(() => {
+                torkild.x = canvas.width * 0.3;
+                torkild.y = canvas.height * 0.5;
+            }, 500);
+        }
+
+        function missedSofa() {
+            endGame('BOMMET PÅ SOFAEN!');
+        }
+
+        function showFloatingText(text, x, y) {
+            particles.push({
+                x: x,
+                y: y,
+                vx: 0,
+                vy: -2,
+                life: 90,
+                text: text,
+                isText: true
+            });
+        }
+
+        function drawFloatingTexts() {
+            particles.forEach((p) => {
+                if (p.isText) {
+                    ctx.font = '12px "Press Start 2P"';
+                    ctx.fillStyle = '#ffff00';
+                    ctx.globalAlpha = p.life / 90;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#ffff00';
+                    ctx.fillText(p.text, p.x - ctx.measureText(p.text).width / 2, p.y);
+                    ctx.shadowBlur = 0;
+                    ctx.globalAlpha = 1;
+                }
+            });
+        }
+
+        function endGame(message) {
+            gameActive = false;
+
+            document.getElementById('gameOver').style.display = 'block';
+            document.getElementById('finalScore').textContent = `Torkilds: ${score}`;
+            document.getElementById('message').textContent = message;
+
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('torkildHighScore', highScore);
+                document.getElementById('newRecord').style.display = 'block';
+            }
+        }
+
+        function gameLoop() {
+            // Retro CRT background with slight color variation
+            const bgNoise = Math.random() * 3;
+            ctx.fillStyle = `rgb(${10 + bgNoise}, ${10 + bgNoise}, ${10 + bgNoise})`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Room background
+            ctx.fillStyle = '#2a2a2a';
+            ctx.fillRect(0, 0, canvas.width, FLOOR_Y);
+
+            createFireParticles();
+            drawFireplace();
+            drawFire();
+            drawFloor();
+            drawSofa();
+            drawTorkild();
+            drawParticles();
+            drawFloatingTexts();
+            updatePhysics();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Prevent zoom gestures
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('gesturechange', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('gestureend', function(e) {
+            e.preventDefault();
+        });
+
+        // Prevent pinch zoom
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Prevent ctrl+scroll zoom
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Prevent keyboard zoom
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '0')) {
+                e.preventDefault();
+            }
+        });
+
+        // Better resize handling
+        function handleResize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // Update positions proportionally
+            sofa.x = canvas.width * 0.65;
+            sofa.y = canvas.height * 0.7;
+            sofa.seatY = canvas.height * 0.7 - 20;
+
+            if (!torkild.isJumping) {
+                torkild.x = canvas.width * 0.3;
+                torkild.y = canvas.height * 0.5;
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+
+        gameLoop();
+    </script>
+</body>
+</html>

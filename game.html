@@ -2,7 +2,7 @@
 <html lang="no">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -24,6 +24,13 @@
             min-height: 100vh;
             font-family: 'Press Start 2P', cursive;
             overflow: hidden;
+            touch-action: pan-x pan-y;
+            -ms-touch-action: pan-x pan-y;
+        }
+
+        /* Prevent zoom on double-tap */
+        * {
+            touch-action: manipulation;
         }
 
         #gameContainer {
@@ -39,6 +46,62 @@
             width: 100%;
             height: 100%;
             touch-action: none;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        /* CRT Screen Effect */
+        #gameContainer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.15),
+                    rgba(0, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            pointer-events: none;
+            z-index: 1000;
+            animation: scanline 8s linear infinite;
+        }
+
+        /* CRT curvature effect */
+        #gameContainer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        @keyframes scanline {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(10px);
+            }
+        }
+
+        /* Retro screen flicker */
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.97; }
+        }
+
+        canvas {
+            animation: flicker 0.15s infinite;
         }
 
         #gameUI {
@@ -56,23 +119,45 @@
         #score, #highScore, #powerupIndicator {
             font-size: clamp(10px, 3vw, 16px);
             color: #00ff00;
-            text-shadow: 0 0 10px #00ff00;
+            text-shadow:
+                0 0 5px #00ff00,
+                0 0 10px #00ff00,
+                0 0 15px #00ff00,
+                0 0 20px #00ff00;
             padding: 8px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #00ff00;
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #00ff00;
+            box-shadow:
+                0 0 10px #00ff00,
+                inset 0 0 10px rgba(0, 255, 0, 0.2);
             display: inline-block;
+            letter-spacing: 2px;
         }
 
         #highScore {
             color: #ffff00;
-            text-shadow: 0 0 10px #ffff00;
+            text-shadow:
+                0 0 5px #ffff00,
+                0 0 10px #ffff00,
+                0 0 15px #ffff00,
+                0 0 20px #ffff00;
             border-color: #ffff00;
+            box-shadow:
+                0 0 10px #ffff00,
+                inset 0 0 10px rgba(255, 255, 0, 0.2);
         }
 
         #powerupIndicator {
             color: #ff00ff;
-            text-shadow: 0 0 10px #ff00ff;
+            text-shadow:
+                0 0 5px #ff00ff,
+                0 0 10px #ff00ff,
+                0 0 15px #ff00ff,
+                0 0 20px #ff00ff;
             border-color: #ff00ff;
+            box-shadow:
+                0 0 10px #ff00ff,
+                inset 0 0 10px rgba(255, 0, 255, 0.2);
         }
 
         #gameOver {
@@ -85,41 +170,68 @@
             padding: 30px;
             text-align: center;
             z-index: 100;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
-            border-radius: 10px;
+            box-shadow:
+                0 0 20px rgba(255, 0, 255, 0.8),
+                0 0 40px rgba(255, 0, 255, 0.6),
+                inset 0 0 20px rgba(255, 0, 255, 0.2);
+            border-radius: 0;
+            image-rendering: pixelated;
         }
 
         #gameOver h1 {
             font-size: clamp(20px, 8vw, 40px);
             color: #ff0000;
-            text-shadow: 0 0 20px #ff0000;
+            text-shadow:
+                0 0 10px #ff0000,
+                0 0 20px #ff0000,
+                0 0 30px #ff0000,
+                2px 2px 0 #000;
             margin-bottom: 20px;
+            animation: glitchText 0.5s infinite;
+        }
+
+        @keyframes glitchText {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-2px, 2px); }
+            94% { transform: translate(2px, -2px); }
         }
 
         #gameOver p {
             font-size: clamp(10px, 4vw, 16px);
             color: #ffff00;
-            text-shadow: 0 0 10px #ffff00;
+            text-shadow:
+                0 0 5px #ffff00,
+                0 0 10px #ffff00,
+                0 0 15px #ffff00;
             margin: 10px 0;
         }
 
         #gameOver button, #gameOver a {
             background: #00ff00;
             color: #000;
-            border: 2px solid #000;
+            border: 3px solid #00ff00;
             padding: clamp(8px, 3vw, 15px);
             font-size: clamp(10px, 3vw, 14px);
             font-family: 'Press Start 2P', cursive;
             cursor: pointer;
             margin: 10px;
-            border-radius: 5px;
+            border-radius: 0;
             text-decoration: none;
             display: inline-block;
+            box-shadow:
+                0 0 10px #00ff00,
+                inset 0 0 10px rgba(0, 255, 0, 0.3);
+            transition: all 0.1s;
         }
 
         #gameOver button:hover, #gameOver a:hover {
             background: #00ffff;
-            text-shadow: 0 0 10px #00ffff;
+            border-color: #00ffff;
+            box-shadow:
+                0 0 15px #00ffff,
+                0 0 30px #00ffff,
+                inset 0 0 15px rgba(0, 255, 255, 0.4);
+            transform: scale(1.05);
         }
 
         .newRecord {
@@ -141,20 +253,27 @@
             transform: translate(-50%, -50%);
             background: rgba(0, 0, 0, 0.95);
             border: 4px solid #00ff00;
-            border-radius: 10px;
+            border-radius: 0;
             padding: 20px;
             z-index: 100;
             max-width: 90%;
             width: 500px;
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.8);
+            box-shadow:
+                0 0 20px rgba(0, 255, 0, 0.8),
+                0 0 40px rgba(0, 255, 0, 0.6),
+                inset 0 0 20px rgba(0, 255, 0, 0.2);
         }
 
         #instructions h3 {
             color: #00ff00;
-            text-shadow: 0 0 10px #00ff00;
+            text-shadow:
+                0 0 5px #00ff00,
+                0 0 10px #00ff00,
+                0 0 15px #00ff00;
             font-size: clamp(10px, 3vw, 14px);
             margin-bottom: 10px;
             text-align: center;
+            letter-spacing: 3px;
         }
 
         #instructions .guide {
@@ -176,24 +295,32 @@
         #instructions button {
             background: #00ff00;
             color: #000;
-            border: 3px solid #000;
+            border: 3px solid #00ff00;
             padding: 12px 25px;
             font-size: clamp(10px, 3vw, 14px);
             font-family: 'Press Start 2P', cursive;
             cursor: pointer;
             margin-top: 15px;
-            border-radius: 5px;
+            border-radius: 0;
             display: block;
             margin-left: auto;
             margin-right: auto;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
-            transition: all 0.3s;
+            box-shadow:
+                0 0 15px #00ff00,
+                0 0 30px rgba(0, 255, 0, 0.6),
+                inset 0 0 10px rgba(0, 255, 0, 0.3);
+            transition: all 0.1s;
+            letter-spacing: 2px;
         }
 
         #instructions button:hover {
             background: #00ffff;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
-            transform: scale(1.05);
+            border-color: #00ffff;
+            box-shadow:
+                0 0 20px #00ffff,
+                0 0 40px rgba(0, 255, 255, 0.8),
+                inset 0 0 15px rgba(0, 255, 255, 0.4);
+            transform: scale(1.08);
         }
     </style>
 </head>
@@ -242,16 +369,28 @@
         let highScore = parseInt(localStorage.getItem('vikingRaceHighScore')) || 0;
         document.getElementById('highScore').textContent = `High: ${highScore}m`;
 
+        // 3D Isometric perspective - viewing from 45 degrees behind and above
+        const PERSPECTIVE = {
+            // Isometric projection: objects further away appear higher on screen and smaller
+            depthScale: 0.5, // How much objects scale with distance (0.5 = half size at horizon)
+            horizonY: canvas.height * 0.15, // Horizon line at 15% from top
+            vanishingPointX: canvas.width / 2,
+            // Y-axis compression for isometric view (makes it look 3D)
+            yCompression: 0.6
+        };
+
         const ship = {
             x: canvas.width / 2,
-            y: canvas.height - 100,
+            y: canvas.height * 0.8, // Ship at bottom (close to camera)
             width: 40,
             height: 60,
-            speed: 1.5,
+            speed: 3, // Increased for better feel
             moveLeft: false,
             moveRight: false,
             hasShield: false,
-            shieldTime: 0
+            shieldTime: 0,
+            // 3D depth position (0 = at camera, 1 = at horizon)
+            depth: 0.9
         };
 
         let gameActive = true;
@@ -364,129 +503,600 @@
             touchActive = false;
         });
 
+        // Helper function: Convert 3D world position to 2D isometric screen position
+        function worldToScreen(worldX, worldZ, worldDepth) {
+            // worldDepth: 0 = far away (horizon), 1 = close (bottom of screen)
+            const screenDepth = 1 - worldDepth; // Invert for rendering
+
+            // Scale based on depth (perspective)
+            const scale = PERSPECTIVE.depthScale + (1 - PERSPECTIVE.depthScale) * worldDepth;
+
+            // Screen Y: far = top, near = bottom (isometric)
+            const screenY = PERSPECTIVE.horizonY + (canvas.height - PERSPECTIVE.horizonY) * worldDepth;
+
+            // Screen X: converge to vanishing point
+            const centerOffset = (worldX - PERSPECTIVE.vanishingPointX) * scale;
+            const screenX = PERSPECTIVE.vanishingPointX + centerOffset;
+
+            return { x: screenX, y: screenY, scale: scale };
+        }
+
         function drawRiver() {
             // Variable river curves - changes over time
             riverCurveVariation = Math.sin(scrollOffset * 0.0005) * 20;
             const currentAmplitude = riverCurveAmplitude + riverCurveVariation;
             const currentSpeed = riverCurveSpeed + Math.sin(scrollOffset * 0.0003) * 0.001;
 
-            // More dynamic but slower river curves
-            riverCurveOffset = Math.sin(scrollOffset * currentSpeed) * currentAmplitude +
-                               Math.sin(scrollOffset * currentSpeed * 1.7) * 20;
-            RIVER_LEFT = BASE_RIVER_LEFT + riverCurveOffset;
-            RIVER_RIGHT = BASE_RIVER_RIGHT + riverCurveOffset;
+            // Draw river from far (top) to near (bottom) for proper isometric view
+            const segments = 40;
+            const leftBankPoints = [];
+            const rightBankPoints = [];
 
-            ctx.fillStyle = '#2a5a8a';
+            for (let i = 0; i <= segments; i++) {
+                // Depth: 0 = horizon (far), 1 = camera (near)
+                const depth = i / segments;
+
+                // Calculate curve based on scroll position and depth
+                const depthOffset = scrollOffset + (1 - depth) * 500; // Far away moves slower
+                const curve = Math.sin(depthOffset * currentSpeed) * currentAmplitude +
+                             Math.sin(depthOffset * currentSpeed * 1.7) * 20;
+
+                // River width in world space
+                const worldRiverWidth = RIVER_WIDTH;
+                const worldCenterX = PERSPECTIVE.vanishingPointX + curve;
+
+                // Convert to screen space
+                const leftWorld = worldCenterX - worldRiverWidth / 2;
+                const rightWorld = worldCenterX + worldRiverWidth / 2;
+
+                const leftScreen = worldToScreen(leftWorld, 0, depth);
+                const rightScreen = worldToScreen(rightWorld, 0, depth);
+
+                leftBankPoints.push(leftScreen);
+                rightBankPoints.push(rightScreen);
+            }
+
+            // Draw river surface with gradient
+            const gradient = ctx.createLinearGradient(0, PERSPECTIVE.horizonY, 0, canvas.height);
+            gradient.addColorStop(0, '#0a2a4a'); // Far - very dark
+            gradient.addColorStop(0.3, '#1a3a5a'); //
+            gradient.addColorStop(0.6, '#2a5a8a'); // Middle
+            gradient.addColorStop(1, '#3a7aba'); // Close - bright
+            ctx.fillStyle = gradient;
+
             ctx.beginPath();
-            ctx.moveTo(RIVER_LEFT, 0);
-
-            for (let y = 0; y <= canvas.height; y += 20) {
-                const curve = Math.sin((scrollOffset + y) * currentSpeed) * currentAmplitude +
-                             Math.sin((scrollOffset + y) * currentSpeed * 1.7) * 20;
-                const x = BASE_RIVER_LEFT + curve;
-                ctx.lineTo(x, y);
+            ctx.moveTo(leftBankPoints[0].x, leftBankPoints[0].y);
+            leftBankPoints.forEach(p => ctx.lineTo(p.x, p.y));
+            for (let i = rightBankPoints.length - 1; i >= 0; i--) {
+                ctx.lineTo(rightBankPoints[i].x, rightBankPoints[i].y);
             }
-
-            for (let y = canvas.height; y >= 0; y -= 20) {
-                const curve = Math.sin((scrollOffset + y) * currentSpeed) * currentAmplitude +
-                             Math.sin((scrollOffset + y) * currentSpeed * 1.7) * 20;
-                const x = BASE_RIVER_RIGHT + curve;
-                ctx.lineTo(x, y);
-            }
-
             ctx.closePath();
             ctx.fill();
 
-            ctx.fillStyle = '#1a4a6a';
-            for (let i = 0; i < canvas.height; i += 40) {
-                const offset = (scrollOffset % 40);
-                const curve = Math.sin((scrollOffset + i + offset) * currentSpeed) * currentAmplitude +
-                             Math.sin((scrollOffset + i + offset) * currentSpeed * 1.7) * 20;
-                ctx.fillRect(BASE_RIVER_LEFT + curve, i + offset, RIVER_WIDTH, 2);
+            // Update collision boundaries (use the closest section)
+            const nearLeft = leftBankPoints[leftBankPoints.length - 1];
+            const nearRight = rightBankPoints[rightBankPoints.length - 1];
+            RIVER_LEFT = nearLeft.x;
+            RIVER_RIGHT = nearRight.x;
+
+            // Draw water flow lines (horizontal stripes for depth illusion)
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            for (let i = 5; i < segments; i += 3) {
+                const depth = i / segments;
+                const left = leftBankPoints[i];
+                const right = rightBankPoints[i];
+
+                ctx.globalAlpha = 0.3 + depth * 0.4; // More visible when closer
+                ctx.lineWidth = 1 + depth * 2;
+                ctx.beginPath();
+                ctx.moveTo(left.x + 5, left.y);
+                ctx.lineTo(right.x - 5, right.y);
+                ctx.stroke();
+            }
+            ctx.globalAlpha = 1;
+
+            // Draw banks with depth shadows
+            ctx.lineWidth = 5;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#000000';
+
+            // Left bank
+            ctx.strokeStyle = '#4a3020';
+            ctx.beginPath();
+            leftBankPoints.forEach((p, i) => {
+                if (i === 0) ctx.moveTo(p.x, p.y);
+                else ctx.lineTo(p.x, p.y);
+            });
+            ctx.stroke();
+
+            // Right bank
+            ctx.beginPath();
+            rightBankPoints.forEach((p, i) => {
+                if (i === 0) ctx.moveTo(p.x, p.y);
+                else ctx.lineTo(p.x, p.y);
+            });
+            ctx.stroke();
+
+            // Add riverbank terrain with hills and mountains
+            ctx.shadowBlur = 0;
+
+            // Draw mountains in background (far away)
+            drawMountains();
+
+            // Draw hills on riverbanks
+            drawHills(leftBankPoints, 'left');
+            drawHills(rightBankPoints, 'right');
+
+            // Detailed grass/ground on riverbanks with texture
+
+            // Left ground with gradient and texture
+            const leftGradient = ctx.createLinearGradient(0, PERSPECTIVE.horizonY, 0, canvas.height);
+            leftGradient.addColorStop(0, '#1a3a1a'); // Dark green at horizon
+            leftGradient.addColorStop(0.4, '#2a4a2a');
+            leftGradient.addColorStop(0.7, '#3a5a3a');
+            leftGradient.addColorStop(1, '#4a6a4a'); // Lighter green close
+            ctx.fillStyle = leftGradient;
+
+            ctx.beginPath();
+            ctx.moveTo(0, PERSPECTIVE.horizonY);
+            ctx.lineTo(leftBankPoints[0].x, leftBankPoints[0].y);
+            leftBankPoints.forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.lineTo(0, canvas.height);
+            ctx.closePath();
+            ctx.fill();
+
+            // Right ground with gradient and texture
+            const rightGradient = ctx.createLinearGradient(canvas.width, PERSPECTIVE.horizonY, canvas.width, canvas.height);
+            rightGradient.addColorStop(0, '#1a3a1a');
+            rightGradient.addColorStop(0.4, '#2a4a2a');
+            rightGradient.addColorStop(0.7, '#3a5a3a');
+            rightGradient.addColorStop(1, '#4a6a4a');
+            ctx.fillStyle = rightGradient;
+
+            ctx.beginPath();
+            ctx.moveTo(canvas.width, PERSPECTIVE.horizonY);
+            ctx.lineTo(rightBankPoints[0].x, rightBankPoints[0].y);
+            rightBankPoints.forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.closePath();
+            ctx.fill();
+
+            // Add field details (grass patches, flowers, paths)
+            drawFieldDetails(leftBankPoints, 'left');
+            drawFieldDetails(rightBankPoints, 'right');
+
+            // Add trees and rocks along banks
+            drawBankDetails(leftBankPoints, 'left');
+            drawBankDetails(rightBankPoints, 'right');
+        }
+
+        function drawMountains() {
+            // Distant mountains on horizon
+            const mountainPeaks = [
+                { x: canvas.width * 0.1, height: 80 },
+                { x: canvas.width * 0.25, height: 120 },
+                { x: canvas.width * 0.4, height: 90 },
+                { x: canvas.width * 0.6, height: 110 },
+                { x: canvas.width * 0.75, height: 95 },
+                { x: canvas.width * 0.9, height: 130 }
+            ];
+
+            mountainPeaks.forEach(peak => {
+                // Mountain gradient - darker at base, lighter at peak
+                const gradient = ctx.createLinearGradient(0, PERSPECTIVE.horizonY - peak.height, 0, PERSPECTIVE.horizonY);
+                gradient.addColorStop(0, '#4a5a6a');
+                gradient.addColorStop(0.3, '#3a4a5a');
+                gradient.addColorStop(1, '#2a3a4a');
+                ctx.fillStyle = gradient;
+
+                ctx.beginPath();
+                ctx.moveTo(peak.x - 100, PERSPECTIVE.horizonY);
+                ctx.lineTo(peak.x, PERSPECTIVE.horizonY - peak.height);
+                ctx.lineTo(peak.x + 100, PERSPECTIVE.horizonY);
+                ctx.closePath();
+                ctx.fill();
+
+                // Snow caps on taller mountains
+                if (peak.height > 100) {
+                    ctx.fillStyle = '#e8f0ff';
+                    ctx.beginPath();
+                    ctx.moveTo(peak.x - 20, PERSPECTIVE.horizonY - peak.height + 20);
+                    ctx.lineTo(peak.x, PERSPECTIVE.horizonY - peak.height);
+                    ctx.lineTo(peak.x + 20, PERSPECTIVE.horizonY - peak.height + 20);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            });
+        }
+
+        function drawHills(bankPoints, side) {
+            // Draw rolling hills along the riverbank
+            ctx.save();
+
+            for (let i = 0; i < bankPoints.length - 5; i += 8) {
+                const depth = i / bankPoints.length;
+                const point = bankPoints[i];
+                const hillWidth = 80 + depth * 120;
+                const hillHeight = 30 + depth * 80;
+
+                // Hill gradient
+                const gradient = ctx.createRadialGradient(
+                    point.x, point.y - hillHeight / 2, 0,
+                    point.x, point.y - hillHeight / 2, hillHeight
+                );
+                gradient.addColorStop(0, '#4a6a4a');
+                gradient.addColorStop(0.6, '#3a5a3a');
+                gradient.addColorStop(1, '#2a4a2a');
+                ctx.fillStyle = gradient;
+
+                // Draw hill
+                ctx.beginPath();
+                if (side === 'left') {
+                    ctx.moveTo(point.x - hillWidth, point.y);
+                    ctx.quadraticCurveTo(point.x - hillWidth / 2, point.y - hillHeight, point.x, point.y);
+                } else {
+                    ctx.moveTo(point.x, point.y);
+                    ctx.quadraticCurveTo(point.x + hillWidth / 2, point.y - hillHeight, point.x + hillWidth, point.y);
+                }
+                ctx.closePath();
+                ctx.fill();
+
+                // Hill shadow
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.beginPath();
+                if (side === 'left') {
+                    ctx.moveTo(point.x - 20, point.y);
+                    ctx.quadraticCurveTo(point.x - 10, point.y - hillHeight * 0.3, point.x, point.y);
+                } else {
+                    ctx.moveTo(point.x, point.y);
+                    ctx.quadraticCurveTo(point.x + 10, point.y - hillHeight * 0.3, point.x + 20, point.y);
+                }
+                ctx.closePath();
+                ctx.fill();
             }
 
-            ctx.strokeStyle = '#654321';
-            ctx.lineWidth = 5;
+            ctx.restore();
+        }
+
+        function drawFieldDetails(bankPoints, side) {
+            // Add grass patches, flowers, bushes, and dirt paths to fields
+            ctx.save();
+
+            for (let i = 3; i < bankPoints.length - 3; i += 4) {
+                const depth = i / bankPoints.length;
+                const point = bankPoints[i];
+                const scale = 0.4 + depth * 0.6;
+
+                // Determine field position
+                const fieldWidth = side === 'left' ? point.x : canvas.width - point.x;
+                const baseX = side === 'left' ? point.x / 2 : point.x + fieldWidth / 2;
+
+                // Random field elements
+                const rand = Math.random();
+
+                if (rand < 0.3) {
+                    // Grass patches (darker/lighter spots)
+                    drawGrassPatch(baseX, point.y - Math.random() * 40, scale, depth);
+                } else if (rand < 0.5) {
+                    // Flower clusters
+                    drawFlowers(baseX, point.y - Math.random() * 30, scale);
+                } else if (rand < 0.7) {
+                    // Small bushes
+                    drawBush(baseX, point.y - Math.random() * 20, scale);
+                }
+            }
+
+            // Add a dirt path running along the field
+            drawDirtPath(bankPoints, side);
+
+            ctx.restore();
+        }
+
+        function drawGrassPatch(x, y, scale, depth) {
+            // Darker or lighter grass patches for texture
+            const isDark = Math.random() > 0.5;
+            ctx.fillStyle = isDark ? 'rgba(30, 50, 30, 0.3)' : 'rgba(80, 100, 60, 0.3)';
+
             ctx.beginPath();
-            ctx.moveTo(BASE_RIVER_LEFT + Math.sin(scrollOffset * currentSpeed) * currentAmplitude, 0);
-            for (let y = 0; y <= canvas.height; y += 10) {
-                const curve = Math.sin((scrollOffset + y) * currentSpeed) * currentAmplitude +
-                             Math.sin((scrollOffset + y) * currentSpeed * 1.7) * 20;
-                ctx.lineTo(BASE_RIVER_LEFT + curve, y);
+            ctx.ellipse(x, y, 20 * scale, 15 * scale, Math.random() * Math.PI, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Add some grass blades
+            ctx.strokeStyle = isDark ? 'rgba(40, 60, 40, 0.5)' : 'rgba(90, 110, 70, 0.5)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 5; i++) {
+                const gx = x + (Math.random() - 0.5) * 30 * scale;
+                const gy = y + (Math.random() - 0.5) * 20 * scale;
+                ctx.beginPath();
+                ctx.moveTo(gx, gy);
+                ctx.lineTo(gx + (Math.random() - 0.5) * 4, gy - 5 * scale);
+                ctx.stroke();
+            }
+        }
+
+        function drawFlowers(x, y, scale) {
+            // Cluster of small flowers
+            const flowerColors = ['#ffcc00', '#ff6699', '#cc99ff', '#ffffff', '#ffaa66'];
+
+            for (let i = 0; i < 5; i++) {
+                const fx = x + (Math.random() - 0.5) * 15 * scale;
+                const fy = y + (Math.random() - 0.5) * 10 * scale;
+                const color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+
+                // Flower stem
+                ctx.strokeStyle = '#2a5a2a';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(fx, fy);
+                ctx.lineTo(fx, fy - 4 * scale);
+                ctx.stroke();
+
+                // Flower petals
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(fx, fy - 5 * scale, 2 * scale, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawBush(x, y, scale) {
+            // Small bush/shrub
+            ctx.fillStyle = '#3a6a3a';
+
+            // Main bush body
+            ctx.beginPath();
+            ctx.arc(x, y, 10 * scale, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Highlight on bush
+            ctx.fillStyle = '#4a7a4a';
+            ctx.beginPath();
+            ctx.arc(x - 3 * scale, y - 2 * scale, 5 * scale, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.beginPath();
+            ctx.ellipse(x, y + 8 * scale, 8 * scale, 3 * scale, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawDirtPath(bankPoints, side) {
+            // Draw a winding dirt path through the field
+            ctx.strokeStyle = 'rgba(101, 67, 33, 0.4)'; // Brown dirt color
+            ctx.lineWidth = 8;
+            ctx.lineCap = 'round';
+
+            ctx.beginPath();
+            for (let i = 0; i < bankPoints.length; i += 3) {
+                const point = bankPoints[i];
+                const depth = i / bankPoints.length;
+                const fieldWidth = side === 'left' ? point.x : canvas.width - point.x;
+                const pathX = side === 'left' ? point.x - fieldWidth * 0.3 : point.x + fieldWidth * 0.3;
+                const pathY = point.y - 10 - Math.sin((scrollOffset + i) * 0.02) * 15;
+
+                if (i === 0) {
+                    ctx.moveTo(pathX, pathY);
+                } else {
+                    ctx.lineTo(pathX, pathY);
+                }
             }
             ctx.stroke();
 
-            ctx.beginPath();
-            ctx.moveTo(BASE_RIVER_RIGHT + Math.sin(scrollOffset * currentSpeed) * currentAmplitude, 0);
-            for (let y = 0; y <= canvas.height; y += 10) {
-                const curve = Math.sin((scrollOffset + y) * currentSpeed) * currentAmplitude +
-                             Math.sin((scrollOffset + y) * currentSpeed * 1.7) * 20;
-                ctx.lineTo(BASE_RIVER_RIGHT + curve, y);
-            }
+            // Path edge/shadow for depth
+            ctx.strokeStyle = 'rgba(80, 50, 20, 0.3)';
+            ctx.lineWidth = 10;
             ctx.stroke();
         }
 
+        function drawBankDetails(bankPoints, side) {
+            // Add trees, rocks, and vegetation along riverbanks
+            for (let i = 5; i < bankPoints.length - 2; i += 6) {
+                const depth = i / bankPoints.length;
+                const point = bankPoints[i];
+                const scale = 0.3 + depth * 0.7; // Smaller when far, larger when near
+
+                const offsetX = side === 'left' ? -30 - Math.random() * 40 : 30 + Math.random() * 40;
+                const treeX = point.x + offsetX * scale;
+                const treeY = point.y;
+
+                // Randomly choose tree or rock
+                if (Math.random() < 0.7) {
+                    drawTree(treeX, treeY, scale, depth);
+                } else {
+                    drawRock(treeX, treeY, scale);
+                }
+            }
+        }
+
+        function drawTree(x, y, scale, depth) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+
+            const treeHeight = 40;
+            const treeWidth = 20;
+
+            // Tree trunk
+            ctx.fillStyle = '#4a3020';
+            ctx.fillRect(-3, -treeHeight * 0.3, 6, treeHeight * 0.3);
+
+            // Tree foliage - pine tree style
+            ctx.fillStyle = depth > 0.5 ? '#2a5a2a' : '#1a4a1a'; // Darker when far
+
+            // Bottom layer
+            ctx.beginPath();
+            ctx.moveTo(0, -treeHeight * 0.3);
+            ctx.lineTo(-treeWidth, -treeHeight * 0.5);
+            ctx.lineTo(treeWidth, -treeHeight * 0.5);
+            ctx.closePath();
+            ctx.fill();
+
+            // Middle layer
+            ctx.beginPath();
+            ctx.moveTo(0, -treeHeight * 0.5);
+            ctx.lineTo(-treeWidth * 0.7, -treeHeight * 0.7);
+            ctx.lineTo(treeWidth * 0.7, -treeHeight * 0.7);
+            ctx.closePath();
+            ctx.fill();
+
+            // Top layer
+            ctx.beginPath();
+            ctx.moveTo(0, -treeHeight);
+            ctx.lineTo(-treeWidth * 0.4, -treeHeight * 0.7);
+            ctx.lineTo(treeWidth * 0.4, -treeHeight * 0.7);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawRock(x, y, scale) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+
+            // Rock
+            ctx.fillStyle = '#5a5a5a';
+            ctx.beginPath();
+            ctx.ellipse(0, -8, 12, 8, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Rock highlight
+            ctx.fillStyle = '#7a7a7a';
+            ctx.beginPath();
+            ctx.ellipse(-3, -10, 5, 3, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Rock shadow
+            ctx.fillStyle = '#3a3a3a';
+            ctx.beginPath();
+            ctx.ellipse(4, -6, 4, 2, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
         function drawShip() {
+            ctx.save();
+
+            // Apply isometric scaling based on ship's depth
+            const shipScale = PERSPECTIVE.depthScale + (1 - PERSPECTIVE.depthScale) * ship.depth;
+
+            ctx.translate(ship.x, ship.y);
+            ctx.scale(shipScale, shipScale * PERSPECTIVE.yCompression);
+
             // Shield effect
             if (ship.hasShield) {
                 ctx.strokeStyle = '#00ffff';
-                ctx.lineWidth = 3;
-                ctx.shadowBlur = 20;
+                ctx.lineWidth = 4;
+                ctx.shadowBlur = 25;
                 ctx.shadowColor = '#00ffff';
                 ctx.beginPath();
-                ctx.arc(ship.x, ship.y + 25, 40, 0, Math.PI * 2);
+                ctx.arc(0, 10, 50, 0, Math.PI * 2);
                 ctx.stroke();
                 ctx.shadowBlur = 0;
             }
 
-            // Viking ship hull
+            // Shadow beneath ship
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.beginPath();
+            ctx.ellipse(0, 45, 25, 8, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Viking ship hull - isometric view from behind/above
             ctx.fillStyle = '#654321';
             ctx.beginPath();
-            ctx.moveTo(ship.x, ship.y - 10);
-            ctx.lineTo(ship.x - ship.width / 2, ship.y + ship.height - 10);
-            ctx.lineTo(ship.x - ship.width / 2 + 5, ship.y + ship.height);
-            ctx.lineTo(ship.x + ship.width / 2 - 5, ship.y + ship.height);
-            ctx.lineTo(ship.x + ship.width / 2, ship.y + ship.height - 10);
+            // Bow (front - pointing away from camera)
+            ctx.moveTo(0, -25);
+            // Left side
+            ctx.lineTo(-20, 20);
+            ctx.lineTo(-18, 30);
+            // Stern (back - toward camera)
+            ctx.lineTo(-10, 35);
+            ctx.lineTo(10, 35);
+            ctx.lineTo(18, 30);
+            // Right side
+            ctx.lineTo(20, 20);
             ctx.closePath();
             ctx.fill();
             ctx.strokeStyle = '#8b4513';
             ctx.lineWidth = 2;
             ctx.stroke();
 
-            // Sail
-            ctx.fillStyle = '#ffffff';
+            // Deck
+            ctx.fillStyle = '#8b6f47';
             ctx.beginPath();
-            ctx.moveTo(ship.x - 2, ship.y + 10);
-            ctx.lineTo(ship.x - 2, ship.y - 20);
-            ctx.lineTo(ship.x + 15, ship.y - 5);
-            ctx.lineTo(ship.x + 15, ship.y + 25);
+            ctx.moveTo(0, -20);
+            ctx.lineTo(-16, 18);
+            ctx.lineTo(-14, 25);
+            ctx.lineTo(14, 25);
+            ctx.lineTo(16, 18);
             ctx.closePath();
             ctx.fill();
-            ctx.strokeStyle = '#cccccc';
-            ctx.lineWidth = 1;
-            ctx.stroke();
 
             // Mast
             ctx.fillStyle = '#8b4513';
-            ctx.fillRect(ship.x - 2, ship.y - 20, 3, 50);
+            ctx.fillRect(-2, -40, 4, 65);
 
-            // Shield on side
+            // Sail - seen from behind at angle
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = '#cccccc';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(-2, -30);
+            ctx.lineTo(-2, 10);
+            ctx.lineTo(-20, 15);
+            ctx.lineTo(-20, -20);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Sail right side
+            ctx.beginPath();
+            ctx.moveTo(2, -30);
+            ctx.lineTo(2, 10);
+            ctx.lineTo(20, 15);
+            ctx.lineTo(20, -20);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Shield on side (left)
             ctx.fillStyle = '#ff0000';
             ctx.beginPath();
-            ctx.arc(ship.x - ship.width / 2 + 5, ship.y + 20, 6, 0, Math.PI * 2);
+            ctx.arc(-18, 8, 5, 0, Math.PI * 2);
             ctx.fill();
             ctx.strokeStyle = '#ffff00';
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // Dragon head at front
+            // Shield on side (right)
+            ctx.fillStyle = '#ff0000';
+            ctx.beginPath();
+            ctx.arc(18, 8, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ffff00';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Dragon head at bow (front)
             ctx.fillStyle = '#8b0000';
             ctx.beginPath();
-            ctx.arc(ship.x, ship.y - 8, 5, 0, Math.PI * 2);
+            ctx.arc(0, -25, 6, 0, Math.PI * 2);
             ctx.fill();
 
             // Dragon neck
-            ctx.fillRect(ship.x - 2, ship.y - 10, 4, 5);
+            ctx.fillRect(-2, -28, 4, 6);
+
+            // Eyes on dragon
+            ctx.fillStyle = '#ffff00';
+            ctx.beginPath();
+            ctx.arc(-2, -26, 1.5, 0, Math.PI * 2);
+            ctx.arc(2, -26, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
         }
 
         function createPowerups() {
@@ -848,7 +1458,19 @@
         }
 
         function gameLoop() {
-            ctx.fillStyle = '#0a0a0a';
+            // Retro CRT background with slight color variation
+            const bgNoise = Math.random() * 3;
+            ctx.fillStyle = `rgb(${10 + bgNoise}, ${10 + bgNoise}, ${10 + bgNoise})`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Add subtle vignette effect
+            const vignette = ctx.createRadialGradient(
+                canvas.width / 2, canvas.height / 2, 0,
+                canvas.width / 2, canvas.height / 2, canvas.width * 0.7
+            );
+            vignette.addColorStop(0, 'rgba(0, 0, 0, 0)');
+            vignette.addColorStop(1, 'rgba(0, 0, 0, 0.4)');
+            ctx.fillStyle = vignette;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             drawSnowflakes();
@@ -866,12 +1488,87 @@
             drawShip();
             updateGame();
 
+            // Retro chromatic aberration effect (subtle)
+            if (Math.random() < 0.05) {
+                ctx.globalAlpha = 0.03;
+                ctx.fillStyle = '#ff0000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.globalAlpha = 1;
+            }
+
             requestAnimationFrame(gameLoop);
         }
 
-        window.addEventListener('resize', () => {
+        // Better resize handling with perspective updates
+        function handleResize() {
+            const oldWidth = canvas.width;
+            const oldHeight = canvas.height;
+
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+
+            // Update perspective constants
+            PERSPECTIVE.horizonY = canvas.height * 0.15;
+            PERSPECTIVE.vanishingPointX = canvas.width / 2;
+
+            // Reposition ship proportionally
+            const shipXRatio = ship.x / oldWidth;
+            ship.x = canvas.width * shipXRatio;
+            ship.y = canvas.height * 0.8;
+
+            // Recreate snowflakes for new dimensions
+            snowflakes = [];
+            createSnowflakes();
+
+            // Recreate santas for new river positions
+            santas = [];
+            createSantas();
+        }
+
+        window.addEventListener('resize', handleResize);
+
+        // Prevent zoom gestures
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('gesturechange', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('gestureend', function(e) {
+            e.preventDefault();
+        });
+
+        // Prevent pinch zoom
+        let lastTouchDistance = 0;
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                lastTouchDistance = Math.hypot(
+                    e.touches[0].pageX - e.touches[1].pageX,
+                    e.touches[0].pageY - e.touches[1].pageY
+                );
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Prevent ctrl+scroll zoom
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Prevent keyboard zoom
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '0')) {
+                e.preventDefault();
+            }
         });
 
         gameLoop();
